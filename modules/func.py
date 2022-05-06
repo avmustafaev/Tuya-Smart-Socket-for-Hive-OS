@@ -1,7 +1,7 @@
-import settings as sett
+import modules.settings as sett
 import time
 import tinytuya
-from connect_sql import sql_zapros as sqz
+from modules.connect_sql import sql_zapros as sqz
 
 
 def select_sw(roz_id, t_chat_id):

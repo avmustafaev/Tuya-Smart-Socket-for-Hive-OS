@@ -1,8 +1,8 @@
-from connect_sql import sql_zapros as sqz
-from make_requests import hiveos_requests_api as os_req_api
-from telega import do_telega
-from if_has_octothorpe import del_octothorpe as del_oct
-import settings as sett
+from modules.connect_sql import sql_zapros as sqz
+from modules.make_requests import hiveos_requests_api as os_req_api
+from modules.telega import do_telega
+from modules.if_has_octothorpe import del_octothorpe as del_oct
+from modules.settings import telegram_chat_id as chat_id
 
 
 """Основной парсинг ответа из HiveOS
@@ -35,14 +35,14 @@ def getrig(ferms_id):
         rig_wd = i.get('watchdog')
         if rig_wd is None:
             parttel = f'🪱 {rig_name}: настройте watchdog'
-            do_telega(sett.telegram_chat_id, parttel)
+            do_telega(chat_id, parttel)
             ignore = True
         else:
             watchdoged = rig_wd.get('enabled')
         if not watchdoged:
             ignore = True
             partt = f'🛠 {rig_name}: на обслуживании не обращаю внимание на ошибки'
-            do_telega(sett.telegram_chat_id, partt)
+            do_telega(chat_id, partt)
         # проверка watchdog тест от 30 03
         online = rig_stats.get('online')
         problems = rig_stats.get('problems')
@@ -52,14 +52,14 @@ def getrig(ferms_id):
                 if ii not in ['has_invalid', 'error_message']:
                     print(rig_name)
                     print(ii)
-                    do_telega(sett.telegram_chat_id, part)
+                    do_telega(chat_id, part)
                     has_problems = True
-        cort_upd = (sett.telegram_chat_id,
+        cort_upd = (chat_id,
                     rig_name,
                     online,
                     has_problems,
                     rig_id)
-        cort_ins = (sett.telegram_chat_id,
+        cort_ins = (chat_id,
                     rig_id,
                     rig_name,
                     online,
@@ -83,7 +83,7 @@ def getfarm():
         farm_name = a.get('name')
         farms_id = str(a.get('id'))
         sql_string1 = 'UPDATE farms_id SET farm_name = ? where farm_id = ? and chat_id = ?'
-        sqz(sql_string1, (farm_name, farms_id, sett.telegram_chat_id))
+        sqz(sql_string1, (farm_name, farms_id, chat_id))
         sql_string2 = "INSERT OR IGNORE INTO farms_id VALUES (?,?,?)"
-        sqz(sql_string2, (sett.telegram_chat_id, farms_id, farm_name))
+        sqz(sql_string2, (chat_id, farms_id, farm_name))
         getrig(farms_id)

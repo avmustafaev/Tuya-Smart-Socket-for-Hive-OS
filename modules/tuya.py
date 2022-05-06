@@ -1,48 +1,46 @@
 import tinytuya
-from connect_sql import sql_zapros as sqz
-import settings as sett
+from modules.connect_sql import sql_zapros as sqz
+import modules.settings as sett
 
-device_status = ''
-device_id = ''
-device_key = ''
-device_name = ''
 
-"""Модуль необходимо запускать вручную при добавлении новых розеток или новых ригов
+def update_tuya_sockets():
+    device_status = ''
+    device_id = ''
+    device_key = ''
+    device_name = ''
 
-В цикле скачиваются все розетки с облака Tuya и сразу сопоставляются с именами ригов
+    c = tinytuya.Cloud(sett.tuya_region,
+                       sett.tuya_api_key,
+                       sett.tuya_api_secret,
+                       sett.tuya_device_id)
+    devices = c.getdevices()
 
-!!! Модуль запускается после отработки модуля hiveosapi.py
+    for i in devices:
+        device_name = i.get('name')
+        device_id = i.get('id')
+        device_key = i.get('key')
+        sw_name = ''
+        result = c.getstatus(device_id)['result']
+        for x in result:
+            name = x.get('code')
+            val = x.get('value')
+            if name in ['switch_1', 'switch']:
+                print(f'☣️ smart socket: {device_name} | ' \
+                        f'id:{device_id} | '\
+                        f'key:{device_key} | ' \
+                        f'on:{str(val)} | ' \
+                        f'code:{str(name)}')
+                sw_name = name
+        tu = (sw_name,
+              device_status,
+              device_id,
+              device_key,
+              device_name)
+        sql_string1 = 'UPDATE hive2 ' \
+                      'SET sw_name = ?, rozetka_status = ?, rozetka_id = ?, ' \
+                      'rozetka_key = ?, rozetka_exists = True where rig_name = ? '
+        sqz(sql_string1, tu)
 
-"""
 
-c = tinytuya.Cloud(sett.tuya_region, 
-                   sett.tuya_api_key,
-                   sett.tuya_api_secret, 
-                   sett.tuya_device_id)
-devices = c.getdevices()
-
-for i in devices:
-    device_name = i.get('name')
-    device_id = i.get('id')
-    device_key = i.get('key')
-    sw_name = ''
-    print(device_name)
-    print(device_id)
-    print(device_key)
-    result = c.getstatus(device_id)
-    rezul = result['result']
-    for x in rezul:
-        name = x.get('code')
-        val = x.get('value')
-        # print(f'▪️  {str(name)} {str(val)}')
-        # print(type(val))
-        if name in ['switch_1', 'switch']:
-            print(f'🚫 {str(name)} {str(val)}')
-            sw_name = name
-    tu = (sw_name, device_status, device_id, device_key, device_name)
-    # print(device_status)
-    sql_string1 = 'UPDATE hive2 ' \
-                  'SET sw_name = ?, rozetka_status = ?, rozetka_id = ?, ' \
-                  'rozetka_key = ?, rozetka_exists = True where rig_name = ? '
-    sqz(sql_string1, tu)
-    print(' ')
+if __name__ == '__main__':
+    update_tuya_sockets()
