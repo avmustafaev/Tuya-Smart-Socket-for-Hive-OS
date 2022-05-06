@@ -1,5 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types
-import modules.settings as sett
+import sys
+sys.path.insert(0, "./modules")
+import settings as sett
 
 telegram_api = sett.telegram_api
 bot = Bot(token=telegram_api)
