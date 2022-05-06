@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+func_tuya.py
+razrezalka.py
+req.txt
+test.py
+tuya2.py
+r.txt
+test.db
