@@ -1,7 +1,7 @@
-import settings as sett
-from hiveosapi import getfarm
-from wallet_onoff import is_not_pause
-from check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
+import modules.settings as sett
+from modules.hiveosapi import getfarm
+from modules.wallet_onoff import is_not_pause
+from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
 from time import sleep
 
 
