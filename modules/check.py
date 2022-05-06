@@ -3,6 +3,14 @@ from modules.connect_sql import sql_zapros as sqz
 from modules.telega import do_telega
 from datetime import datetime as dtime
 
+"""В этом модуле прописана вся логика
+осталось ещё из модуля hiveosapi вынести лишгюю логику оттуда сюда
+Как всё работает:
+в модуле hiveosapi в цикле заполняется БД нынешней ситуацией в ферме и всё.
+И функции этого модуля делают запросы в БД и таким образом в зависимости от ситуации с каждым ригом
+обрабатывают логику работы всей системы
+"""
+
 
 def wakeuped(t_chat_id):
     emo = ''

@@ -76,7 +76,7 @@ def getrig(ferms_id):
 def getfarm():
     """Функция получения списка ферм и их АйДи
 
-    TODO вызов getfarm вынести в отдельную функцию
+    TODO вызов getrig вынести в отдельную функцию
     """
     farms_response = os_req_api('')['data']
     for a in farms_response:
