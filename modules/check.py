@@ -19,19 +19,13 @@ def wakeuped(t_chat_id):
                  'FROM hive2 ' \
                  'WHERE rig_status != "working"  and rig_online = True and chat_id = ? '
     rows = sqz(sql_string, (t_chat_id,))
-    
     for row in rows:
         if row[0] == 'probably':
-            event_rig = ': ожил сам'
-            emo = '🌱 '
+            do_telega(t_chat_id, f'🌱 {row[1]}: ожил сам')
         if row[0] == 'rebooted':
-            event_rig = ': розеточка помогла! перезагрузился!'
-            emo = '☘️ '
+            do_telega(t_chat_id, f'☘️ {row[1]}: розеточка помогла! перезагрузился!')
         if row[0] == 'emergency':
-            event_rig = ': восстановлен из аварийных'
-            emo = '🍀 '
-        part = emo + row[1] + event_rig
-        do_telega(t_chat_id, part)
+            do_telega(t_chat_id, f'🍀 {row[1]}: восстановлен из аварийных')
     sql_string2 = 'UPDATE hive2 ' \
                   'SET time = NULL , rig_status = "working" ' \
                   'WHERE rig_status != "working"  and rig_online = True and chat_id = ?'
@@ -41,7 +35,8 @@ def wakeuped(t_chat_id):
 def probably_sleeping(t_chat_id):
     sql_string1 = 'SELECT rig_name ' \
                   'FROM hive2 ' \
-                  'WHERE rozetka_exists = True and rig_status = "working"  and rig_online = False and chat_id = ?'
+                  'WHERE rozetka_exists = True and rig_status = "working"  ' \
+                  'and rig_online = False and chat_id = ? and is_watchdog = True'
     rows = sqz(sql_string1, (t_chat_id,))
     for row in rows:
         part = f'🤐 {row[0]}: молчит, даём 10 минут, может обновляется или перезагружается?'
@@ -71,7 +66,8 @@ def rebooting(t_chat_id):
     timenow = dtime.now()
     sql_string1 = 'SELECT time, rig_name, rozetka_id, rig_id ' \
                   'FROM hive2 ' \
-                  'WHERE rozetka_exists = True and rig_status = "probably"  and rig_online = False and chat_id = ? '
+                  'WHERE rozetka_exists = True and rig_status = "probably"  ' \
+                  'and rig_online = False and chat_id = ? and is_watchdog = True'
     rows = sqz(sql_string1, (t_chat_id,))
     for row in rows:
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
@@ -81,9 +77,9 @@ def rebooting(t_chat_id):
             do_telega(t_chat_id, part)
             do_rozetka(t_chat_id, row[2], 'reboot')
             sql_string2 = 'UPDATE hive2 ' \
-                          'SET time = ? , rig_status = "rebooted" ' \
-                          'WHERE rozetka_exists = True and rig_status = "probably" and ' \
-                          'rig_online = False and chat_id = ? and rig_id = ? '
+                        'SET time = ? , rig_status = "rebooted" ' \
+                        'WHERE rozetka_exists = True and rig_status = "probably" and ' \
+                        'rig_online = False and chat_id = ? and rig_id = ? '
             sqz(sql_string2, (timenow, t_chat_id, row[3]))
 
 
@@ -91,7 +87,8 @@ def re_problems(t_chat_id):
     timenow = dtime.now()
     sql_string = 'SELECT rig_name, rozetka_id, rig_id ' \
                  'FROM hive2 ' \
-                 'WHERE rozetka_exists = True and has_problems = True and rig_online = True and chat_id = ? '
+                 'WHERE rozetka_exists = True and ' \
+                 'has_problems = True and rig_online = True and chat_id = ? and is_watchdog = True'
     rows = sqz(sql_string, (t_chat_id,))
     for row in rows:
         part = f'♻️ {row[0]}: есть проблемы — перезагружаем...'
@@ -107,7 +104,8 @@ def do_emergency(t_chat_id):
     timenow = dtime.now()
     sql_string = 'SELECT time, rig_name, rozetka_id, rig_id ' \
                  'FROM hive2 ' \
-                 'WHERE rozetka_exists = True and rig_status = "rebooted"  and rig_online = False and chat_id = ? '
+                 'WHERE rozetka_exists = True and ' \
+                 'rig_status = "rebooted"  and rig_online = False and chat_id = ? and is_watchdog = True'
     rows = sqz(sql_string, (t_chat_id,))
     for row in rows:
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
@@ -126,9 +124,9 @@ def do_emergency(t_chat_id):
 def unemergency(t_chat_id):
     sql_string1 = 'SELECT rozetka_id, rig_name ' \
                   'FROM hive2 ' \
-                  'WHERE rozetka_exists = True and rig_status = "emergency" and rig_online = False and chat_id = ? '
+                  'WHERE rozetka_exists = True and ' \
+                  'rig_status = "emergency" and rig_online = False and chat_id = ? and is_watchdog = True'
     rows = sqz(sql_string1, (t_chat_id,))
     for row in rows:
-        part = f'🐣 {row[1]}: Пытаюсь восстановить из аварийных'
-        do_telega(t_chat_id, part)
+        do_telega(t_chat_id, f'🐣 {row[1]}: Пытаюсь восстановить из аварийных')
         do_rozetka(t_chat_id, row[0], 'reboot')

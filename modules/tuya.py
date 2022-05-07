@@ -4,7 +4,6 @@ import modules.settings as sett
 
 
 def update_tuya_sockets():
-    device_status = ''
     device_id = ''
     device_key = ''
     device_name = ''
@@ -32,12 +31,11 @@ def update_tuya_sockets():
                         f'code:{str(name)}')
                 sw_name = name
         tu = (sw_name,
-              device_status,
               device_id,
               device_key,
               device_name)
         sql_string1 = 'UPDATE hive2 ' \
-                      'SET sw_name = ?, rozetka_status = ?, rozetka_id = ?, ' \
+                      'SET sw_name = ?, rozetka_id = ?, ' \
                       'rozetka_key = ?, rozetka_exists = True where rig_name = ? '
         sqz(sql_string1, tu)
 

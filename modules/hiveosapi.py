@@ -1,8 +1,8 @@
 from modules.connect_sql import sql_zapros as sqz
 from modules.make_requests import hiveos_requests_api as os_req_api
-from modules.telega import do_telega
 from modules.if_has_octothorpe import del_octothorpe as del_oct
 from modules.settings import telegram_chat_id as chat_id
+from modules.wallet_onoff import rig_has_problems, is_watchdoged
 
 
 """Основной парсинг ответа из HiveOS
@@ -14,62 +14,36 @@ from modules.settings import telegram_chat_id as chat_id
 
 
 def getrig(ferms_id):
-    """Помимо получения списка ригов, их параметров
-    в этой функции происходит проверка на включенный ватчдог
-    и если он отключен происходит игнорирование присваивания аварийных статусов данному ригу
-    на будущее этот механизм необхимо вынести из этой функции
-
-    TODO игнорирование ватчдога оформить в отдельную функцию в модуле check.py
-
-    Args:
-        ferms_id для отработки функции обязательно в неё необходимо передать ID фермы в которой находится риг
-    """
-    ignore = False
     rig_response = os_req_api(f'{ferms_id}/workers?platform=1')['data']
+    
+    sql_upd_string = 'UPDATE hive2 ' \
+                     'SET chat_id=?, rig_name=?, rig_online = ?, is_watchdog = ?, has_problems = ? ' \
+                     'WHERE rig_id = ?'
+    
     for i in rig_response:
-        has_problems = False
         rig_name = del_oct(i.get('name'))
-        rig_id = i.get('id')
         rig_stats = i.get('stats')
-        # проверка watchdog тест от 30 03
-        rig_wd = i.get('watchdog')
-        if rig_wd is None:
-            parttel = f'🪱 {rig_name}: настройте watchdog'
-            do_telega(chat_id, parttel)
-            ignore = True
-        else:
-            watchdoged = rig_wd.get('enabled')
-        if not watchdoged:
-            ignore = True
-            partt = f'🛠 {rig_name}: на обслуживании не обращаю внимание на ошибки'
-            do_telega(chat_id, partt)
-        # проверка watchdog тест от 30 03
-        online = rig_stats.get('online')
-        problems = rig_stats.get('problems')
-        if problems is not None and not ignore:
-            for ii in problems:
-                part = f'🤬 {rig_name}: {ii}'
-                if ii not in ['has_invalid', 'error_message']:
-                    print(rig_name)
-                    print(ii)
-                    do_telega(chat_id, part)
-                    has_problems = True
+        is_online = rig_stats.get('online')
+        is_watchdog_on = is_watchdoged(i.get('watchdog'), rig_name)
+        has_problems = rig_has_problems(rig_stats.get('problems'), rig_name)
+        rig_id = i.get('id')
         cort_upd = (chat_id,
                     rig_name,
-                    online,
+                    is_online,
+                    is_watchdog_on,
                     has_problems,
                     rig_id)
         cort_ins = (chat_id,
                     rig_id,
                     rig_name,
-                    online,
+                    is_online,
                     '',
-                    'working', '', '', '', '', '',
+                    'working', '', '', 
+                    is_watchdog_on, 
+                    '', '',
                     has_problems)
-        sql_string1 = 'UPDATE hive2 SET chat_id=?, rig_name=?, rig_online = ?, has_problems = ? where rig_id = ?'
-        sqz(sql_string1, cort_upd)
-        sql_string2 = 'INSERT OR IGNORE INTO hive2 VALUES (?,?,?,?,?,?,?,?,?,?,?,?)'
-        sqz(sql_string2, cort_ins)
+        sqz(sql_upd_string, cort_upd)
+        sqz('INSERT OR IGNORE INTO hive2 VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', cort_ins)
 
 
 # Функция посторочного запроса ферм из системы
