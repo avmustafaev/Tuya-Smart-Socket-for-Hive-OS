@@ -42,5 +42,30 @@ def check_onoff_wallet(onoff_wallet_id, ferm_id):
     return False
 
 
+def is_watchdoged(rig_watchdog_status, rig_name):
+    if rig_watchdog_status is None:
+        return compile_send_telegram('🪱 ', rig_name, ': настройте watchdog', True)
+    elif not rig_watchdog_status.get('enabled'):
+        return compile_send_telegram('🛠 ', rig_name, ': на обслуживании не обращаю внимание на ошибки', False)
+    return True
+
+
+def compile_send_telegram(emotion, rig_name, message, bool_response):
+    part = f'{emotion}{rig_name}{message}'
+    print(part)
+    do_telega(chat_id, part)
+    return bool_response
+
+
+def rig_has_problems(rig_problems, rig_name):
+    if rig_problems is not None:
+        isnt_prbmls = False
+        for ii in rig_problems:
+            if ii not in ['has_invalid', 'error_message']:
+                isnt_prbmls = compile_send_telegram('🤬 ', rig_name, f': {ii}', True)
+        return isnt_prbmls
+    return False
+
+
 if __name__ == '__main__':
     print(is_not_pause())
