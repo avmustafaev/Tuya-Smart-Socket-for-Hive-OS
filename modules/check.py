@@ -13,8 +13,6 @@ from datetime import datetime as dtime
 
 
 def wakeuped(t_chat_id):
-    emo = ''
-    event_rig = ''
     sql_string = 'SELECT rig_status, rig_name ' \
                  'FROM hive2 ' \
                  'WHERE rig_status != "working"  and rig_online = True and chat_id = ? '
