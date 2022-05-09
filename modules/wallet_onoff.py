@@ -44,7 +44,7 @@ def check_onoff_wallet(onoff_wallet_id, ferm_id):
 
 def is_watchdoged(rig_watchdog_status, rig_name):
     if rig_watchdog_status is None:
-        return compile_send_telegram('🪱 ', rig_name, ': настройте watchdog', True)
+        return compile_send_telegram('🪱 ', rig_name, ': настройте watchdog', False)
     elif not rig_watchdog_status.get('enabled'):
         return compile_send_telegram('🛠 ', rig_name, ': на обслуживании не обращаю внимание на ошибки', False)
     return True
