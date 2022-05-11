@@ -1,5 +1,8 @@
+import os
+import sys
+sys.path.insert(0, "./")
 from modules.send_to_telegram import do_telega
-from modules.make_requests import hiveos_requests_api as os_req_api
+from modules.make_requests import hiveos_api_patch, hiveos_requests_api as os_req_api
 from modules.connect_sql import sql_zapros as sqz
 
 
@@ -14,30 +17,47 @@ from modules.connect_sql import sql_zapros as sqz
 """
 
 
-def is_not_pause():
-    # Получение id кошелька onoff
+def get_wallet_info(wallet_name):
     sql_string = 'SELECT farm_id ' \
                  'FROM farms_id'
     ferm_id = sqz(sql_string, ())[0][0]
     wallet_response = os_req_api(f'{ferm_id}/wallets')['data']
     for row in wallet_response:
-        if row.get('name') == 'onoff':
-            return check_onoff_wallet(row.get('id'), ferm_id)
-    do_telega('🔌 Кошелёк onoff не найден, поэтому пауза не проверяется')
+        if row.get('name') == wallet_name:
+            answer = (row.get('id'), row.get('wal'))
+            return answer
+    do_telega(f'🔌 Кошелёк {wallet_name} не найден')
     return True
-
-
-def check_onoff_wallet(onoff_wallet_id, ferm_id):
+    
+    
+def wallet_parameter_true(wallet_name):
     try:
-        int_onoff = int(os_req_api(
-            f'{ferm_id}/wallets/{onoff_wallet_id}').get('wal'))
+        int_parameter = int(get_wallet_info(wallet_name)[1])
     except ValueError:
-        int_onoff = 33
-    if int_onoff:
+        int_parameter = 1
+    if int_parameter:
+        return True
+    return False
+
+
+def need_update():
+    if wallet_parameter_true('update_rigs_and_sockets'):
+        do_telega('Вы запросили обновить БД')
+        print('Вы запросили обновить БД')
+        wallet_id = get_wallet_info('update_rigs_and_sockets')[0]
+        print(wallet_id)
+        hiveos_api_patch(wallet_id)
+        os.remove(os.path.join("db", "data.db"))
+
+
+def is_not_pause():
+    if wallet_parameter_true('onoff'):
         return True
     do_telega('👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
     print('Скрипт на паузе')
     return False
+
+
 
 
 def is_watchdoged(rig_watchdog_status, rig_name):
@@ -67,3 +87,4 @@ def rig_has_problems(rig_problems, rig_name):
 
 if __name__ == '__main__':
     print(is_not_pause())
+    need_update()
