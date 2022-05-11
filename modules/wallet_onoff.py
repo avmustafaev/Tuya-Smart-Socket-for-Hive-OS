@@ -1,6 +1,5 @@
-from modules.telega import do_telega
+from modules.send_to_telegram import do_telega
 from modules.make_requests import hiveos_requests_api as os_req_api
-from modules.settings import telegram_chat_id as chat_id
 from modules.connect_sql import sql_zapros as sqz
 
 
@@ -18,14 +17,13 @@ from modules.connect_sql import sql_zapros as sqz
 def is_not_pause():
     # Получение id кошелька onoff
     sql_string = 'SELECT farm_id ' \
-                 'FROM farms_id ' \
-                 'WHERE chat_id = ? '
-    ferm_id = sqz(sql_string, (chat_id,))[0][0]
+                 'FROM farms_id'
+    ferm_id = sqz(sql_string, ())[0][0]
     wallet_response = os_req_api(f'{ferm_id}/wallets')['data']
     for row in wallet_response:
         if row.get('name') == 'onoff':
             return check_onoff_wallet(row.get('id'), ferm_id)
-    do_telega(chat_id, '🔌 Кошелёк onoff не найден, поэтому пауза не проверяется')
+    do_telega('🔌 Кошелёк onoff не найден, поэтому пауза не проверяется')
     return True
 
 
@@ -37,7 +35,7 @@ def check_onoff_wallet(onoff_wallet_id, ferm_id):
         int_onoff = 33
     if int_onoff:
         return True
-    do_telega(chat_id, '👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
+    do_telega('👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
     print('Скрипт на паузе')
     return False
 
@@ -53,7 +51,7 @@ def is_watchdoged(rig_watchdog_status, rig_name):
 def compile_send_telegram(emotion, rig_name, message, bool_response):
     part = f'{emotion}{rig_name}{message}'
     print(part)
-    do_telega(chat_id, part)
+    do_telega(part)
     return bool_response
 
 
