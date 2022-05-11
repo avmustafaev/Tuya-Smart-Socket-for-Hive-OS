@@ -5,12 +5,9 @@ conn = sqlite3.connect(os.path.join("db", "data.db"))
 cursor = conn.cursor()
 
 def sql_zapros(sql_string, tupple):
-    # connection = sqlite3.connect('smartsocket.db')
-    # cursor = connection.cursor()
     cursor.execute(sql_string, tupple)
     response_list = cursor.fetchall()
     conn.commit()
-    # connection.close()
     return response_list
 
 
