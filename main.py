@@ -1,4 +1,3 @@
-from webbrowser import get
 from modules.connect_sql import db_not_exists, init_db
 from modules.hiveosapi import getfarm
 from modules.tuya import update_tuya_sockets
