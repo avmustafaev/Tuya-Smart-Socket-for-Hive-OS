@@ -136,3 +136,4 @@ r.txt
 test.db
 .DS_Store
 modules/tmp.py
+db/data.db

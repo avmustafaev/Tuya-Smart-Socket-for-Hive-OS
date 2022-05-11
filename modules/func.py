@@ -4,16 +4,16 @@ import tinytuya
 from modules.connect_sql import sql_zapros as sqz
 
 
-def select_sw(roz_id, t_chat_id):
-    sql_string = 'SELECT sw_name FROM hive2 WHERE rozetka_id = ? and chat_id = ?'
-    return sqz(sql_string, (roz_id, t_chat_id,))[0][0]
+def select_sw(roz_id):
+    sql_string = 'SELECT sw_name FROM hive2 WHERE rozetka_id = ?'
+    return sqz(sql_string, (roz_id, ))[0][0]
 
 
-def do_rozetka(t_chat_id, roz_id, doing):
+def do_rozetka(roz_id, doing):
     print(roz_id)
     commands_off = ''
     commands_on = ''
-    sw_name = select_sw(roz_id, t_chat_id)
+    sw_name = select_sw(roz_id)
     if sw_name == 'switch_1':
         commands_off = {
             'commands': [{
