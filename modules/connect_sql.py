@@ -11,7 +11,7 @@ def sql_zapros(sql_string, tupple):
     return response_list
 
 
-def _init_db():
+def init_db():
     """Инициализирует БД"""
     with open(os.path.join("install", "createdb.sql"), "r") as f:
         sql = f.read()
@@ -19,14 +19,11 @@ def _init_db():
     conn.commit()
 
 
-def check_db_exists():
+
+def db_not_exists():  # sourcery skip: use-named-expression
     """Проверяет, инициализирована ли БД, если нет — инициализирует"""
-    cursor.execute("SELECT name FROM sqlite_master "
-                   "WHERE type='table' AND name='farms_id'")
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='farms_id'")
     table_exists = cursor.fetchall()
     if table_exists:
-        return
-    _init_db()
-
-
-check_db_exists()
+        return False
+    return True
