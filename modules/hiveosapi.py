@@ -1,5 +1,6 @@
 from modules.connect_sql import sql_zapros as sqz
 from modules.make_requests import hiveos_requests_api as os_req_api
+from modules.make_requests import getfarms_api, getrigs_api
 from modules.if_has_octothorpe import del_octothorpe as del_oct
 from modules.wallet_onoff import rig_has_problems, is_watchdoged
 
@@ -13,8 +14,7 @@ from modules.wallet_onoff import rig_has_problems, is_watchdoged
 
 
 def getrig(ferms_id):
-    rig_response = os_req_api(f'{ferms_id}/workers?platform=1')['data']
-    
+    rig_response = getrigs_api(ferms_id)
     sql_upd_string = 'UPDATE hive2 ' \
                      'SET rig_name=?, rig_online = ?, is_watchdog = ?, has_problems = ? ' \
                      'WHERE rig_id = ?'
@@ -50,7 +50,7 @@ def getfarm():
 
     TODO вызов getrig вынести в отдельную функцию
     """
-    farms_response = os_req_api('')['data']
+    farms_response = getfarms_api()
     sql_string1 = 'UPDATE farms_id SET farm_name = ? where farm_id = ?'
     sql_string2 = 'INSERT OR IGNORE INTO farms_id VALUES (?,?)'
     for a in farms_response:

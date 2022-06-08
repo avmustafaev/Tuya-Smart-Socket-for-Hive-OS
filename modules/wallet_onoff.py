@@ -24,8 +24,7 @@ def get_wallet_info(wallet_name):
     wallet_response = os_req_api(f'{ferm_id}/wallets')['data']
     for row in wallet_response:
         if row.get('name') == wallet_name:
-            answer = (row.get('id'), row.get('wal'))
-            return answer
+            return row.get('id'), row.get('wal')
     do_telega(f'🔌 Кошелёк {wallet_name} не найден')
     return True
     

@@ -24,3 +24,12 @@ def hiveos_api_patch(wallet_id):
     print(part)
     headers = {'Content-Type': 'application/json', 'Authorization': f"Bearer {os_api}"}
     return requests.patch(url, headers=headers, data=part)
+
+
+
+def getfarms_api():
+    return hiveos_requests_api('')['data']
+
+
+def getrigs_api(ferms_id):
+    return hiveos_requests_api(f'{ferms_id}/workers?platform=1')['data']
