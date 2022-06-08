@@ -2,6 +2,7 @@ from modules.func import do_rozetka
 from modules.connect_sql import sql_zapros as sqz
 from modules.send_to_telegram import do_telega
 from datetime import datetime as dtime
+from modules.settings import pause
 
 
 
@@ -39,7 +40,7 @@ def probably_sleeping():
                   'and rig_online = False and is_watchdog = True'
     rows = sqz(sql_string1, ())
     for row in rows:
-        part = f'🤐 {row[0]}: молчит, даём 10 минут, может обновляется или перезагружается?'
+        part = f'🤐 {row[0]}: молчит, даём {pause} секунд, может обновляется или перезагружается?'
         do_telega(part)
     sql_string2 = 'UPDATE hive2 ' \
                   'SET time = ? , rig_status = "probably" ' \
@@ -72,8 +73,8 @@ def rebooting():
     for row in rows:
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to reboot:', diff.seconds)
-        if diff.seconds > 600:
-            part = f'♻️ {row[1]}: молчит больше 10 минут — перезагружаем...'
+        if diff.seconds > pause:
+            part = f'♻️ {row[1]}: молчит больше {pause} секунд — перезагружаем...'
             do_telega(part)
             do_rozetka(row[2], 'reboot')
             sql_string2 = 'UPDATE hive2 ' \
@@ -110,8 +111,8 @@ def do_emergency():
     for row in rows:
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to shutdown:', diff.seconds)
-        if diff.seconds > 600:
-            part = f'🆘️ {row[1]}: Авария!!! Риг не перезагрузился за 10 минут, отключаю питание, приезжайте разбирайтесь!'
+        if diff.seconds > pause:
+            part = f'🆘️ {row[1]}: Авария!!! Риг не перезагрузился за {pause} секунд, отключаю питание, приезжайте разбирайтесь!'
             do_telega(part)
             do_rozetka(row[2], 'off')
             sql_string_2 = 'UPDATE hive2 ' \

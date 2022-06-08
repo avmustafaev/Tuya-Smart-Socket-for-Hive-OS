@@ -4,6 +4,7 @@ from modules.tuya import update_tuya_sockets
 from modules.wallet_onoff import is_not_pause
 from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
 from time import sleep
+from modules.settings import pause
 
 
 def main():
@@ -16,8 +17,8 @@ def main():
         if is_not_pause():
             print('Скрипт в боевом режиме!')
             do_actions_sequence()
-        print('Пауза 610 секунд , до следующей отработки цикла...')
-        sleep(610)
+        print(f'Пауза {pause + 10} секунд , до следующей отработки цикла...')
+        sleep(pause+10)
 
 
 def do_actions_sequence():
