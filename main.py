@@ -5,6 +5,8 @@ from modules.wallet_onoff import is_not_pause
 from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
 from time import sleep
 from modules.settings import pause
+from modules.send_to_telegram import do_telega
+
 
 
 def main():
@@ -35,4 +37,5 @@ def do_actions_sequence():
 
 
 if __name__ == '__main__':
+    do_telega('🚀 Запуск скрипта на сервере!')
     main()
