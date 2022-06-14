@@ -1,7 +1,5 @@
 import os
 import sys
-
-from idna import valid_contextj
 sys.path.insert(0, "./")
 from modules.send_to_telegram import do_telega
 from modules.make_requests import hiveos_api_patch, hiveos_requests_api as os_req_api
