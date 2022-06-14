@@ -1,5 +1,9 @@
 import os
+import re
+from ssl import VERIFY_ALLOW_PROXY_CERTS
 import sys
+
+from idna import valid_contextj
 sys.path.insert(0, "./")
 from modules.send_to_telegram import do_telega
 from modules.make_requests import hiveos_api_patch, hiveos_requests_api as os_req_api
@@ -49,13 +53,35 @@ def need_update():
         os.remove(os.path.join("db", "data.db"))
 
 
+def pause_on():
+    sql_string = 'SELECT value FROM pref WHERE name="pause"'
+    val_pause = sqz(sql_string, ())[0][0]
+    if val_pause == "pause":
+        return True
+    elif val_pause == "unpause":
+        return False
+    
+
+
+"""
 def is_not_pause():
     if wallet_parameter_true('onoff'):
         return True
     do_telega('👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
     print('Скрипт на паузе')
     return False
+"""
 
+def is_not_pause():
+    wallet_pause = not wallet_parameter_true('onoff')
+    telega_pause = pause_on()
+    bolik = not (wallet_pause or telega_pause)
+    print(wallet_pause, telega_pause, bolik)
+    if not bolik:
+        do_telega('👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
+        print('Скрипт на паузе')
+        return False
+    return True
 
 
 
@@ -85,5 +111,5 @@ def rig_has_problems(rig_problems, rig_name):
 
 
 if __name__ == '__main__':
-    print(is_not_pause())
-    need_update()
+    is_not_pause()
+    # need_update()

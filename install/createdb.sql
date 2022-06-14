@@ -17,3 +17,10 @@ CREATE TABLE hive2 (
     has_problems   BOOLEAN
 );
 
+CREATE TABLE pref (
+    name  STRING UNIQUE ON CONFLICT ABORT,
+    value STRING
+);
+
+
+INSERT INTO pref (name, value) VALUES ('pause', 'unpause');

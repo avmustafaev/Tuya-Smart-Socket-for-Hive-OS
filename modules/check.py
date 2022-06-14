@@ -3,7 +3,7 @@ from modules.connect_sql import sql_zapros as sqz
 from modules.send_to_telegram import do_telega
 from datetime import datetime as dtime
 from modules.settings import pause
-
+from modules.wallet_onoff import pause_on
 
 
 """В этом модуле прописана вся логика
@@ -71,6 +71,9 @@ def rebooting():
                   'and rig_online = False and is_watchdog = True'
     rows = sqz(sql_string1, ())
     for row in rows:
+        if pause_on():
+            do_telega('⏸ Поставлен на паузу!')
+            break
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to reboot:', diff.seconds)
         if diff.seconds > pause:
@@ -92,6 +95,9 @@ def re_problems():
                  'has_problems = True and rig_online = True and is_watchdog = True'
     rows = sqz(sql_string, ())
     for row in rows:
+        if pause_on():
+            do_telega('⏸ Поставлен на паузу!')
+            break
         part = f'♻️ {row[0]}: есть проблемы — перезагружаем...'
         do_telega(part)
         do_rozetka(row[1], 'reboot')
@@ -109,6 +115,9 @@ def do_emergency():
                  'rig_status = "rebooted"  and rig_online = False and is_watchdog = True'
     rows = sqz(sql_string, ())
     for row in rows:
+        if pause_on():
+            do_telega('⏸ Поставлен на паузу!')
+            break
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to shutdown:', diff.seconds)
         if diff.seconds > pause:
@@ -129,5 +138,8 @@ def unemergency():
                   'rig_status = "emergency" and rig_online = False and is_watchdog = True'
     rows = sqz(sql_string1, ())
     for row in rows:
+        if pause_on():
+            do_telega('⏸ Поставлен на паузу!')
+            break
         do_telega(f'🐣 {row[1]}: Пытаюсь восстановить из аварийных')
         do_rozetka(row[0], 'reboot')

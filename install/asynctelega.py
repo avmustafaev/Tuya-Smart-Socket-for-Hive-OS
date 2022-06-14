@@ -35,18 +35,15 @@ async def send_pause(message: types.Message):
     
 @dp.message_handler(commands=['unpause'])
 async def send_pause(message: types.Message):
-    pauseunpause("unpause")
-    response_chat = 'Обработчик активирован!'
-    print(response_chat)
+    if int(message.chat.id) == int(telegram_chat_id):
+        pauseunpause("unpause")
+        response_chat = 'Обработчик активирован!'
+        print(response_chat)
+    else:
+        response_chat = 'Не авторизован ты!'
     await message.reply(response_chat)
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    # old style:
-    # await bot.send_message(message.chat.id, message.text)
-
-    await message.answer(message.text)
     
 
 if __name__ == '__main__':
