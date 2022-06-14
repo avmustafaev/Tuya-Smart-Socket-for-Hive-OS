@@ -1,6 +1,4 @@
 import os
-import re
-from ssl import VERIFY_ALLOW_PROXY_CERTS
 import sys
 
 from idna import valid_contextj
