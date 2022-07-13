@@ -1,9 +1,10 @@
-from modules.func import do_rozetka
+# from modules.func import do_rozetka
 from modules.connect_sql import sql_zapros as sqz
 from modules.send_to_telegram import do_telega
 from datetime import datetime as dtime
 from modules.settings import pause
 from modules.wallet_onoff import pause_on
+from modules.notifiyer import add_notify
 
 
 """В этом модуле прописана вся логика
@@ -22,11 +23,11 @@ def wakeuped():
     rows = sqz(sql_string, ())
     for row in rows:
         if row[0] == 'probably':
-            do_telega(f'🌱 {row[1]}: ожил сам')
+            add_notify(row[1], 'self_heal')
         if row[0] == 'rebooted':
-            do_telega(f'☘️ {row[1]}: розеточка помогла! перезагрузился!')
+            add_notify(row[1], 'socket_healed')
         if row[0] == 'emergency':
-            do_telega(f'🍀 {row[1]}: восстановлен из аварийных')
+            add_notify(row[1], 'heal_from_emergency')
     sql_string2 = 'UPDATE hive2 ' \
                   'SET time = NULL , rig_status = "working" ' \
                   'WHERE rig_status != "working"  and rig_online = True'
@@ -40,8 +41,7 @@ def probably_sleeping():
                   'and rig_online = False and is_watchdog = True'
     rows = sqz(sql_string1, ())
     for row in rows:
-        part = f'🤐 {row[0]}: молчит, даём {pause} секунд, может обновляется или перезагружается?'
-        do_telega(part)
+        add_notify(row[0], 'silent')
     sql_string2 = 'UPDATE hive2 ' \
                   'SET time = ? , rig_status = "probably" ' \
                   'WHERE rozetka_exists = True and rig_status = "working"  and rig_online = False'
@@ -55,8 +55,7 @@ def bez_rozetki():
                   'WHERE rozetka_exists != True and rig_status = "working"  and rig_online = False'
     rows = sqz(sql_string1, ())
     for row in rows:
-        part = f'🚫 {row[0]}: Нет розетки! Сразу перевожу в аварийный статус!'
-        do_telega(part)
+        add_notify(row[0], 'no_socket')
         sql_string2 = 'UPDATE hive2 ' \
                       'SET time = ? , rig_status = "emergency" ' \
                       'WHERE rig_id = ?'
@@ -77,9 +76,7 @@ def rebooting():
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to reboot:', diff.seconds)
         if diff.seconds > pause:
-            part = f'♻️ {row[1]}: молчит больше {pause} секунд — перезагружаем...'
-            do_telega(part)
-            do_rozetka(row[2], 'reboot')
+            add_notify(row[1], 'too_long_silent_reboot')
             sql_string2 = 'UPDATE hive2 ' \
                         'SET time = ? , rig_status = "rebooted" ' \
                         'WHERE rozetka_exists = True and rig_status = "probably" and ' \
@@ -98,9 +95,7 @@ def re_problems():
         if pause_on():
             do_telega('⏸ Поставлен на паузу!')
             break
-        part = f'♻️ {row[0]}: есть проблемы — перезагружаем...'
-        do_telega(part)
-        do_rozetka(row[1], 'reboot')
+        add_notify(row[0], 'has_problem_reboot')
         sql_string_2 = 'UPDATE hive2 ' \
                        'SET time = ? , rig_status = "rebooted", has_problems = False ' \
                        'WHERE rozetka_exists = True and rig_id = ? '
@@ -121,9 +116,7 @@ def do_emergency():
         diff = timenow - dtime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f')
         print('time to shutdown:', diff.seconds)
         if diff.seconds > pause:
-            part = f'🆘️ {row[1]}: Авария!!! Риг не перезагрузился за {pause} секунд, отключаю питание, приезжайте разбирайтесь!'
-            do_telega(part)
-            do_rozetka(row[2], 'off')
+            add_notify(row[1], 'is_emergency')
             sql_string_2 = 'UPDATE hive2 ' \
                            'SET time = ? , rig_status = "emergency" ' \
                            'WHERE rozetka_exists = True and rig_status = "rebooted"  and ' \
@@ -141,5 +134,4 @@ def unemergency():
         if pause_on():
             do_telega('⏸ Поставлен на паузу!')
             break
-        do_telega(f'🐣 {row[1]}: Пытаюсь восстановить из аварийных')
-        do_rozetka(row[0], 'reboot')
+        add_notify(row[1], 'heal_try')

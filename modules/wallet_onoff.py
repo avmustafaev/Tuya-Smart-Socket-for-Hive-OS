@@ -4,7 +4,7 @@ sys.path.insert(0, "./")
 from modules.send_to_telegram import do_telega
 from modules.make_requests import hiveos_api_patch, hiveos_requests_api as os_req_api
 from modules.connect_sql import sql_zapros as sqz
-
+from modules.notifiyer import add_notify
 
 """Глобальная проверка отключения отработки скрипта
 
@@ -58,16 +58,6 @@ def pause_on():
         return False
     
 
-
-"""
-def is_not_pause():
-    if wallet_parameter_true('onoff'):
-        return True
-    do_telega('👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает')
-    print('Скрипт на паузе')
-    return False
-"""
-
 def is_not_pause():
     wallet_pause = not wallet_parameter_true('onoff')
     telega_pause = pause_on()
@@ -83,27 +73,23 @@ def is_not_pause():
 
 def is_watchdoged(rig_watchdog_status, rig_name):
     if rig_watchdog_status is None:
-        return compile_send_telegram('🪱 ', rig_name, ': настройте watchdog', False)
+        add_notify(rig_name, 'no_watchdog')
+        return False
     elif not rig_watchdog_status.get('enabled'):
-        return compile_send_telegram('🛠 ', rig_name, ': на обслуживании не обращаю внимание на ошибки', False)
+        add_notify(rig_name, 'rig_ignored')
+        return False
     return True
 
 
-def compile_send_telegram(emotion, rig_name, message, bool_response):
-    part = f'{emotion}{rig_name}{message}'
-    print(part)
-    do_telega(part)
-    return bool_response
-
-
 def rig_has_problems(rig_problems, rig_name):
-    if rig_problems is not None:
-        isnt_prbmls = False
-        for ii in rig_problems:
-            if ii not in ['has_invalid', 'error_message']:
-                isnt_prbmls = compile_send_telegram('🤬 ', rig_name, f': {ii}', True)
-        return isnt_prbmls
-    return False
+    if rig_problems is None:
+        return False
+    isnt_prbmls = False
+    for ii in rig_problems:
+        if ii not in ['has_invalid', 'error_message']:
+            add_notify(rig_name, ii)
+            isnt_prbmls = ii != 'overheat'
+    return isnt_prbmls
 
 
 if __name__ == '__main__':
