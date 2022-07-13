@@ -1,10 +1,31 @@
 from modules.connect_sql import sql_zapros as sqz
+from modules.send_to_telegram import do_telega
 
 
 def add_notify(rig_id, notification_type):
     sql_string = 'INSERT OR IGNORE INTO notify_pool VALUES (?,?)'
     sqz(sql_string, (rig_id, notification_type))
     
+    
+    
+# Разрезалка большого текста для телеграма
+def razrez4096(message):
+    parts = ['']
+    while len(message) > 0:
+        if len(message) > 4096:
+            partw = message[:4096]
+            first_lnbr = partw.rfind('\n')
+            if first_lnbr != -1:
+                parts.append(partw[:first_lnbr])
+                message = message[first_lnbr:]
+            else:
+                parts.append(partw)
+                message = message[4096:]
+        else:
+            parts.append(message)
+            break
+    return parts
+
 
 
 def notify_constructor():
@@ -22,3 +43,11 @@ def notify_constructor():
             for rig_status in rig_statuses:
                 send_text = f'{send_text}    {rig_status[0]}\n'
     print(send_text)
+    partes = razrez4096(send_text)
+    for part in partes:
+        do_telega(part)
+    
+    
+    
+    
+
