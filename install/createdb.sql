@@ -22,5 +22,15 @@ CREATE TABLE pref (
     value STRING
 );
 
+CREATE TABLE powerman (
+    id       STRING  PRIMARY KEY,
+    [action] INTEGER
+);
+
+CREATE TABLE notify (
+    text STRING
+);
+
+
 
 INSERT INTO pref (name, value) VALUES ('pause', 'unpause');
