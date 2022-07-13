@@ -22,4 +22,4 @@ def notify_constructor():
             for rig_status in rig_statuses:
                 send_text = f'{send_text}    {rig_status[0]}\n'
     print(send_text)
-    # sqz('DELETE FROM notify_pool', ())
+    sqz('DELETE FROM notify_pool', ())
