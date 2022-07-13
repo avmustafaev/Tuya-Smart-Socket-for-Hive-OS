@@ -27,10 +27,11 @@ CREATE TABLE powerman (
     [action] INTEGER
 );
 
-CREATE TABLE notify (
-    rig_id STRING PRIMARY KEY,
-    notify STRING
+CREATE TABLE notify_pool (
+    rig_id    STRING PRIMARY KEY,
+    notify_id STRING
 );
+
 
 CREATE TABLE comparison (
     status_id   STRING PRIMARY KEY ON CONFLICT ABORT,

@@ -1,5 +1,6 @@
 from modules.connect_sql import db_not_exists, init_db
 from modules.hiveosapi import getfarm
+from modules.notifiyer import notify_constructor
 from modules.tuya import update_tuya_sockets
 from modules.wallet_onoff import is_not_pause
 from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
@@ -34,7 +35,7 @@ def do_actions_sequence():
     re_problems()
     do_emergency()
     bez_rozetki()
-
+    notify_constructor()
 
 if __name__ == '__main__':
     do_telega('🚀 Запуск скрипта на сервере! ')
