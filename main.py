@@ -38,5 +38,5 @@ def do_actions_sequence():
     notify_constructor()
 
 if __name__ == '__main__':
-    do_telega('🚀 Запуск скрипта на сервере! ')
+    # do_telega('🚀 Запуск скрипта на сервере! ')
     main()
