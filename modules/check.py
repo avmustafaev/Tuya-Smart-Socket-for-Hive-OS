@@ -77,7 +77,6 @@ def rebooting():
         print('time to reboot:', diff.seconds)
         if diff.seconds > pause:
             add_notify(row[1], 'too_long_silent_reboot')
-            # do_rozetka(row[2], 'reboot')
             sql_string2 = 'UPDATE hive2 ' \
                         'SET time = ? , rig_status = "rebooted" ' \
                         'WHERE rozetka_exists = True and rig_status = "probably" and ' \
@@ -97,7 +96,6 @@ def re_problems():
             do_telega('⏸ Поставлен на паузу!')
             break
         add_notify(row[0], 'has_problem_reboot')
-        # do_rozetka(row[1], 'reboot')
         sql_string_2 = 'UPDATE hive2 ' \
                        'SET time = ? , rig_status = "rebooted", has_problems = False ' \
                        'WHERE rozetka_exists = True and rig_id = ? '
@@ -119,7 +117,6 @@ def do_emergency():
         print('time to shutdown:', diff.seconds)
         if diff.seconds > pause:
             add_notify(row[1], 'is_emergency')
-            # do_rozetka(row[2], 'off')
             sql_string_2 = 'UPDATE hive2 ' \
                            'SET time = ? , rig_status = "emergency" ' \
                            'WHERE rozetka_exists = True and rig_status = "rebooted"  and ' \
@@ -138,4 +135,3 @@ def unemergency():
             do_telega('⏸ Поставлен на паузу!')
             break
         add_notify(row[1], 'heal_try')
-        # do_rozetka(row[0], 'reboot')

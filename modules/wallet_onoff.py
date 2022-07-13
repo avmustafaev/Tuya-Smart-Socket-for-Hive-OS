@@ -82,14 +82,14 @@ def is_watchdoged(rig_watchdog_status, rig_name):
 
 
 def rig_has_problems(rig_problems, rig_name):
-    if rig_problems is not None:
-        isnt_prbmls = False
-        for ii in rig_problems:
-            if ii not in ['has_invalid', 'error_message']:
-                add_notify(rig_name, ii)
-                isnt_prbmls = True
-        return isnt_prbmls
-    return False
+    if rig_problems is None:
+        return False
+    isnt_prbmls = False
+    for ii in rig_problems:
+        if ii not in ['has_invalid', 'error_message']:
+            add_notify(rig_name, ii)
+            isnt_prbmls = ii != 'overheat'
+    return isnt_prbmls
 
 
 if __name__ == '__main__':

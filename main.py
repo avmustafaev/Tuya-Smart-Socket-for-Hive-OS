@@ -1,12 +1,14 @@
 from modules.connect_sql import db_not_exists, init_db
 from modules.hiveosapi import getfarm
 from modules.notifiyer import notify_constructor
+from modules.socket_pool_manage import socket_manage
 from modules.tuya import update_tuya_sockets
 from modules.wallet_onoff import is_not_pause
 from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, do_emergency, bez_rozetki, unemergency
 from time import sleep
 from modules.settings import pause
 from modules.send_to_telegram import do_telega
+from modules.func import select_sw
 
 
 
@@ -36,6 +38,7 @@ def do_actions_sequence():
     do_emergency()
     bez_rozetki()
     notify_constructor()
+    socket_manage()
 
 if __name__ == '__main__':
     # do_telega('🚀 Запуск скрипта на сервере! ')

@@ -46,7 +46,7 @@ INSERT INTO comparison (status_id, status_text) VALUES ('heal_from_emergency', '
 INSERT INTO comparison (status_id, status_text) VALUES ('silent', '🤐 Риг молчит, подождём, может обновляется или перезагружается');
 INSERT INTO comparison (status_id, status_text) VALUES ('no_socket', '🚫 Нет розетки! Сразу перевожу в аварийный статус');
 INSERT INTO comparison (status_id, status_text) VALUES ('no_watchdog', '🪱 настройте watchdog на риге');
-INSERT INTO comparison (status_id, status_text) VALUES ('overheat', '🥵 Перегрев');
+INSERT INTO comparison (status_id, status_text) VALUES ('overheat', '🥵 Перегрев, выключаю риг..');
 INSERT INTO comparison (status_id, status_text) VALUES ('missed_unit', '🫥 Карта отсутствует');
 INSERT INTO comparison (status_id, status_text) VALUES ('no_hashrate', '💤 Нет хешрейта на риге');
 INSERT INTO comparison (status_id, status_text) VALUES ('missed_temp', '🌡 Нет данных температуры на карте');
