@@ -4,7 +4,7 @@ sys.path.insert(0, "./")
 from modules.send_to_telegram import do_telega
 from modules.make_requests import hiveos_api_patch, hiveos_requests_api as os_req_api
 from modules.connect_sql import sql_zapros as sqz
-
+from modules.notifiyer import add_notify
 
 """Глобальная проверка отключения отработки скрипта
 
@@ -85,7 +85,9 @@ def is_watchdoged(rig_watchdog_status, rig_name):
     if rig_watchdog_status is None:
         return compile_send_telegram('🪱 ', rig_name, ': настройте watchdog', False)
     elif not rig_watchdog_status.get('enabled'):
+        add_notify(rig_name, 'rig_ignored')
         return compile_send_telegram('🛠 ', rig_name, ': на обслуживании не обращаю внимание на ошибки', False)
+        # return False
     return True
 
 
