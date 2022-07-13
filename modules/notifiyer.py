@@ -41,7 +41,7 @@ def notify_constructor():
         if len(rig_statuses) != 0:
             send_text = f'{send_text}{row_status[1]}:\n'
             for rig_status in rig_statuses:
-                send_text = f'{send_text}    {rig_status[0]}\n'
+                send_text = f'{send_text}       {rig_status[0]}\n'
     print(send_text)
     partes = razrez4096(send_text)
     for part in partes:
