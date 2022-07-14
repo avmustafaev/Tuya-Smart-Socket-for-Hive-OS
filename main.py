@@ -8,7 +8,6 @@ from modules.check import wakeuped, probably_sleeping, rebooting, re_problems, d
 from time import sleep
 from modules.settings import pause
 from modules.send_to_telegram import do_telega
-from modules.func import select_sw
 
 
 
