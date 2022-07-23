@@ -1,4 +1,5 @@
 import requests
+
 from modules.settings import telegram_api as tel_api
 from modules.settings import telegram_chat_id as chat_id
 
@@ -11,5 +12,8 @@ from modules.settings import telegram_chat_id as chat_id
 
 """
 
+
 def do_telega(part):
-    requests.get(f'https://api.telegram.org/bot{tel_api}/sendMessage?text={part}&chat_id={chat_id}')
+    requests.get(
+        f"https://api.telegram.org/bot{tel_api}/sendMessage?text={part}&chat_id={chat_id}"
+    )

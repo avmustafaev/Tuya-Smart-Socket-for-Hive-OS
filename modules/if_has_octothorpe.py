@@ -1,5 +1,4 @@
 from modules.notifiyer import add_notify
-from modules.send_to_telegram import do_telega
 
 """Удаление знака решётки # из имени рига в HiveOS
 и предупрежение о необходимости переименования рига
@@ -10,5 +9,5 @@ from modules.send_to_telegram import do_telega
 def del_octothorpe(has_octothorpe):
     clean_string = has_octothorpe.replace("#", "")
     if has_octothorpe != clean_string:
-        add_notify(clean_string, 'clean_string')
+        add_notify(clean_string, "clean_string")
     return clean_string
