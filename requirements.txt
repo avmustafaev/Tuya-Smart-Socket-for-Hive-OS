@@ -2,4 +2,4 @@ requests==2.27.1
 tinytuya==1.4.0
 python-dotenv==0.20.0
 aiogram==2.20
-
+psycopg2==2.9.3

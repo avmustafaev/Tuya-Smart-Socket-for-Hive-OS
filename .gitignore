@@ -143,3 +143,4 @@ oop-test.py
 .markdownlint.yaml
 .isort.cfg
 .flake8
+env/
