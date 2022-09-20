@@ -9,7 +9,7 @@ from modules.check import (
     unemergency,
     wakeuped,
 )
-from modules.connect_sql import db_not_exists, init_db
+from modules.connect_sql import backup_db, db_not_exists, init_db
 from modules.hiveosapi import getfarm
 from modules.notifiyer import notify_constructor
 from modules.send_to_telegram import do_telega
@@ -45,6 +45,7 @@ def do_actions_sequence():
     bez_rozetki()
     notify_constructor()
     socket_manage()
+    backup_db()
 
 
 if __name__ == "__main__":

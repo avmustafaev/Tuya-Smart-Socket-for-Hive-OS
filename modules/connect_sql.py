@@ -1,8 +1,17 @@
 import os
 import sqlite3
 
-conn = sqlite3.connect(os.path.join("db", "data.db"))
+conn_back = sqlite3.connect(os.path.join("db", "data.db"))
+conn = sqlite3.connect(":memory:")
 cursor = conn.cursor()
+
+
+def backup_db():
+    conn.backup(conn_back)
+    conn.commit()
+    conn_back.commit()
+    conn.close()
+    conn_back.close()
 
 
 def sql_zapros(sql_string, tupple):

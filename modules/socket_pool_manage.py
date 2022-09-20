@@ -5,7 +5,7 @@ from modules.wallet_onoff import pause_on
 
 
 def manager_sql(notify_id, action):
-    sql_string = "SELECT rig_id " "FROM notify_pool " "WHERE notify_id = ?"
+    sql_string = "SELECT rig_id FROM notify_pool WHERE notify_id = ?"
     socket_pool = sqz(sql_string, (notify_id,))
     print(socket_pool)
     for socket in socket_pool:
