@@ -53,8 +53,10 @@ def need_update():
 def pause_on():
     val_pause = os.getenv("PAUSEUNPAUSE")
     if val_pause == "pause":
+        print("-pause-")
         return True
-    elif val_pause == "unpause":
+    elif val_pause == "unpause" or val_pause is None:
+        print("-unpause-")
         return False
 
 
