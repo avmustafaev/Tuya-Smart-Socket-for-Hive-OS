@@ -77,7 +77,8 @@ def is_watchdoged(rig_watchdog_status, rig_name):
         add_notify(rig_name, "no_watchdog")
         return False
     elif not rig_watchdog_status.get("enabled"):
-        add_notify(rig_name, "rig_ignored")
+        # Убрал оповещение о ватчдоге
+        # add_notify(rig_name, "rig_ignored")
         return False
     return True
 

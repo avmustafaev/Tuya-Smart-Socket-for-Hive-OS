@@ -29,12 +29,10 @@ def init_db():
     conn.commit()
 
 
-def db_not_exists():  # sourcery skip: use-named-expression
+def db_not_exists():    # sourcery skip: use-named-expression
     """Проверяет, инициализирована ли БД, если нет — инициализирует"""
     cursor.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='farms_id'"
     )
     table_exists = cursor.fetchall()
-    if table_exists:
-        return False
-    return True
+    return not table_exists
