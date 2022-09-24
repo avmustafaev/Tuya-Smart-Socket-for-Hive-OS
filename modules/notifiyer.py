@@ -1,4 +1,5 @@
 from modules.connect_sql import sql_zapros as sqz
+from modules.get_minute import start_hour
 from modules.send_to_telegram import do_telega
 
 
@@ -28,15 +29,16 @@ def razrez4096(message):
 
 def notify_constructor():
     send_text = ""
-    sql_string = "SELECT status_id, status_text " "FROM comparison"
-    sql_string2 = "SELECT rig_id " "FROM notify_pool " "WHERE notify_id = ? "
+    sql_string = "SELECT status_id, status_text FROM comparison"
+    sql_string2 = "SELECT rig_id FROM notify_pool WHERE notify_id = ? "
     statuses = sqz(sql_string, ())
     for row_status in statuses:
-        rig_statuses = sqz(sql_string2, (row_status[0],))
-        if len(rig_statuses) != 0:
-            send_text = f"{send_text}{row_status[1]}:\n"
-            for rig_status in rig_statuses:
-                send_text = f"{send_text}       {rig_status[0]}\n"
+        if row_status == "rig_ignored" and start_hour() or row_status != "rig_ignored":
+            rig_statuses = sqz(sql_string2, (row_status[0],))
+            if len(rig_statuses) != 0:
+                send_text = f"{send_text}{row_status[1]}:\n"
+                for rig_status in rig_statuses:
+                    send_text = f"{send_text}       {rig_status[0]}\n"
     print(send_text)
     partes = razrez4096(send_text)
     for part in partes:
