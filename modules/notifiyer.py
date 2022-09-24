@@ -33,7 +33,7 @@ def notify_constructor():
     sql_string2 = "SELECT rig_id FROM notify_pool WHERE notify_id = ? "
     statuses = sqz(sql_string, ())
     for row_status in statuses:
-        if row_status == "rig_ignored" and start_hour() or row_status != "rig_ignored":
+        if row_status[0] == "rig_ignored" and start_hour() or row_status[0] != "rig_ignored":
             rig_statuses = sqz(sql_string2, (row_status[0],))
             if len(rig_statuses) != 0:
                 send_text = f"{send_text}{row_status[1]}:\n"
