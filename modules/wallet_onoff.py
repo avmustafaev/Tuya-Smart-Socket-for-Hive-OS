@@ -6,6 +6,7 @@ from modules.make_requests import hiveos_api_patch
 from modules.make_requests import hiveos_requests_api as os_req_api
 from modules.notifiyer import add_notify
 from modules.send_to_telegram import do_telega
+from modules.get_minute import start_hour as start_hour
 
 sys.path.insert(0, "./")
 
@@ -36,9 +37,7 @@ def wallet_parameter_true(wallet_name):
         int_parameter = int(get_wallet_info(wallet_name)[1])
     except ValueError:
         int_parameter = 1
-    if int_parameter:
-        return True
-    return False
+    return bool(int_parameter)
 
 
 def need_update():
@@ -66,7 +65,8 @@ def is_not_pause():
     bolik = not (wallet_pause or telega_pause)
     print(wallet_pause, telega_pause, bolik)
     if not bolik:
-        do_telega("👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает")
+        if start_hour():
+            do_telega("👨🏼‍🔧 Вся ферма на обслуживании, скрипт не отрабатывает")
         print("Скрипт на паузе")
         return False
     return True
@@ -77,8 +77,8 @@ def is_watchdoged(rig_watchdog_status, rig_name):
         add_notify(rig_name, "no_watchdog")
         return False
     elif not rig_watchdog_status.get("enabled"):
-        # Убрал оповещение о ватчдоге
-        # add_notify(rig_name, "rig_ignored")
+        if start_hour():
+            add_notify(rig_name, "rig_ignored")
         return False
     return True
 
