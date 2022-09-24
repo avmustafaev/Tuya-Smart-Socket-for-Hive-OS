@@ -1,12 +1,14 @@
 import sys
 
+sys.path.insert(0, "./")
+
 from aiogram import Bot, Dispatcher, executor, types
 
 import modules.settings as sett
 from modules.pauseunpause import pauseunpause
 from modules.settings import telegram_chat_id
 
-sys.path.insert(0, "./")
+
 
 telegram_api = sett.telegram_api
 bot = Bot(token=telegram_api)
