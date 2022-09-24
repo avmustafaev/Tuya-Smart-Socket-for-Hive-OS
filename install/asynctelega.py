@@ -3,10 +3,7 @@ import sys
 sys.path.insert(0, "./")
 
 from aiogram import Bot, Dispatcher, executor, types
-
 import modules.settings as sett
-from modules.pauseunpause import pauseunpause
-from modules.settings import telegram_chat_id
 
 
 
@@ -27,8 +24,8 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=["pause"])
 async def send_pause(message: types.Message):
-    if int(message.chat.id) == int(telegram_chat_id):
-        pauseunpause("pause")
+    if int(message.chat.id) == int(sett.telegram_chat_id):
+        sett.pauseunpause("pause")
         response_chat = "Обработчик на паузе!"
         print(response_chat)
     else:
@@ -38,8 +35,8 @@ async def send_pause(message: types.Message):
 
 @dp.message_handler(commands=["unpause"])
 async def send_unpause(message: types.Message):
-    if int(message.chat.id) == int(telegram_chat_id):
-        pauseunpause("unpause")
+    if int(message.chat.id) == int(sett.telegram_chat_id):
+        sett.pauseunpause("unpause")
         response_chat = "Обработчик активирован!"
         print(response_chat)
     else:

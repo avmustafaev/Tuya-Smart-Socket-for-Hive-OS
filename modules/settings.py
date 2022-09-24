@@ -31,3 +31,8 @@ heroku_user = os.getenv("HEROKU_USER")
 heroku_password = os.getenv("HEROKU_PASSWORD")
 heroku_port = os.getenv("HEROKU_PORT")
 print(f"В настройках установлена пауза: {pause} секунд\n")
+
+
+def pauseunpause(value):
+    os.environ["PAUSEUNPAUSE"] = value
+    print(os.getenv("PAUSEUNPAUSE"))

@@ -51,8 +51,7 @@ def need_update():
 
 
 def pause_on():
-    sql_string = 'SELECT value FROM pref WHERE name="pause"'
-    val_pause = sqz(sql_string, ())[0][0]
+    val_pause = os.getenv("PAUSEUNPAUSE")
     if val_pause == "pause":
         return True
     elif val_pause == "unpause":
