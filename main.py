@@ -21,6 +21,7 @@ from modules.wallet_onoff import is_not_pause
 
 def main():
     if db_not_exists():
+        print("Создаётся пустая БД")
         init_db()
         getfarm()
         update_tuya_sockets()
