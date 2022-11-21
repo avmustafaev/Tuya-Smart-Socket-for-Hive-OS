@@ -23,6 +23,7 @@ def main():
     if db_not_exists():
         print("Создаётся пустая БД")
         init_db()
+        print("Запрашивается список ферм")
         getfarm()
         update_tuya_sockets()
 
