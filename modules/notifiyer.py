@@ -32,6 +32,13 @@ def notify_constructor():
     sql_string = "SELECT status_id, status_text FROM comparison"
     sql_string2 = "SELECT rig_id FROM notify_pool WHERE notify_id = ? "
     statuses = sqz(sql_string, ())
+    # очистка уведомлений об игнорируемых ригах
+    if not start_hour():
+        cleared_rig_ids = sqz(sql_string2,("rig_ignored",))
+        sql_del_string = "DELETE FROM notify_pool WHERE rig_id = ? "
+        for del_rig in cleared_rig_ids:
+            sqz(sql_del_string, (del_rig[0],))
+    # конец очистки
     for row_status in statuses:
         if row_status[0] == "rig_ignored" and start_hour() or row_status[0] != "rig_ignored":
             rig_statuses = sqz(sql_string2, (row_status[0],))
