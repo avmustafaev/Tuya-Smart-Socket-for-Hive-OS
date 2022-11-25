@@ -47,7 +47,8 @@ def notify_constructor():
                 send_text = f"{send_text}{row_status[1]}:\n"
                 for rig_status in rig_statuses:
                     send_text = f"{send_text}       {rig_status[0]}\n"
-                    send_text = get_exbitron() + send_text
+    if start_hour():
+        send_text = get_exbitron() + send_text
     print(send_text)
     partes = razrez4096(send_text)
     for part in partes:
