@@ -1,9 +1,10 @@
 import modules.exbitron as exb
+from  modules.settings import exb_access_key, exb_secret_key
 
-client = exb.Client(access_key = '41be1bdef5d879f9', secret_key = '2a58e1026cbc0be5d838c0886b9275b0')
-# rxd = client.get("/api/v2/peatio/account/balances/rxd")
+client = exb.Client(access_key = exb_access_key, secret_key = exb_secret_key)
+rxd = client.get("/api/v2/peatio/account/balances/rxd")
 print(client.check_auth())
-# print(rxd)
+print(rxd)
 
 
 #rxd = usdt = round(float(client.get("/api/v2/peatio/account/balances/rxd")['balance']),2)
