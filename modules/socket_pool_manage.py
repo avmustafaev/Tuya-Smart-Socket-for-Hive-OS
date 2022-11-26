@@ -20,5 +20,5 @@ def socket_manage():
     manager_sql("overheat", "off")
     manager_sql("is_emergency", "off")
     manager_sql("too_long_silent_reboot", "reboot")
-    manager_sql("heal_try", "on")
+    manager_sql("heal_try", "reboot")
     sqz("DELETE FROM notify_pool", ())
