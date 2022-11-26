@@ -7,3 +7,7 @@ def get_exbitron():
     usdt = round(float(client.get("/api/v2/peatio/account/balances/usdt")['balance']),2)
     kas = round(float(client.get("/api/v2/peatio/account/balances/kas")['balance']),2)
     return f'☢️ Баланс RXD на бирже: {rxd}\n💰 Баланс USDT: {usdt}\n🅚 Баланс KAS: {kas}\n\n🌟\n\n\n'
+
+
+
+print(get_exbitron())
