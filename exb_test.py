@@ -1,7 +1,6 @@
 import modules.exbitron
-from modules.settings import exb_access_key, exb_secret_key
 
-client = modules.exbitron.Client(access_key = exb_access_key, secret_key = exb_secret_key)
+client = modules.exbitron.Client(access_key = '41be1bdef5d879f9', secret_key = '2a58e1026cbc0be5d838c0886b9275b0')
 rxd = client.get("/api/v2/peatio/account/balances/rxd")
 print(rxd)
 
