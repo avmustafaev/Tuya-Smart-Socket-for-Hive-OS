@@ -10,6 +10,7 @@ from modules.check import (
     wakeuped,
 )
 from modules.connect_sql import backup_db, db_not_exists, init_db
+from modules.get_exbitron import get_exbitron
 from modules.hiveosapi import getfarm
 from modules.notifiyer import notify_constructor
 from modules.send_to_telegram import do_telega
@@ -20,6 +21,7 @@ from modules.wallet_onoff import is_not_pause
 
 
 def main():
+    print(get_exbitron())
     if db_not_exists():
         print("Создаётся пустая БД")
         init_db()
