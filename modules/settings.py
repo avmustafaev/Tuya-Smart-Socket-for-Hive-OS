@@ -32,6 +32,7 @@ heroku_password = os.getenv("HEROKU_PASSWORD")
 heroku_port = os.getenv("HEROKU_PORT")
 exb_access_key = os.getenv("EXB_AK")
 exb_secret_key = os.getenv("EXB_SK")
+minutes_window = int(os.getenv("MINUTES_WINDOW"))
 print(f"В настройках установлена пауза: {pause} секунд\n")
 
 

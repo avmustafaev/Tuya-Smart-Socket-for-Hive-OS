@@ -1,4 +1,4 @@
-import modules.exbitron
+import modules.exbitron as exb
 from modules.settings import exb_access_key, exb_secret_key
 
 def get_exbitron():
