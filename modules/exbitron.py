@@ -5,7 +5,7 @@ import json
 
 try:
     from urllib import urlencode
-except Exception:
+except:
     from urllib.parse import urlencode
 from time import time
 
