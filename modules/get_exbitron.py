@@ -12,4 +12,4 @@ def get_exbitron():
     kas_locked = round(float(kas['locked']),2)
     usdt_balance = round(float(usdt['balance']),2)
     kas_balance = round(float(kas['balance']),2)
-    return f'💰💰💰\nUSDT\nbalance: {usdt_balance}\nlocked: {usdt_locked}\n\nRXD\nbalance: {rxd_balance}\nlocked: {rxd_locked}\n\nKAS\nbalance {kas_balance}\nlocked: {kas_locked}\n💰💰💰\n'
+    return f'💰💰💰\nUSDT\nbalance: {usdt_balance}\nlocked: {usdt_locked}\n\nRXD\nbalance: {rxd_balance}\nlocked: {rxd_locked}\n\nKAS\nbalance {kas_balance}\nlocked: {kas_locked}\n💰💰💰\n\n\n'
