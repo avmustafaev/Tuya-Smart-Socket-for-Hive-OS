@@ -1,7 +1,6 @@
 from modules.connect_sql import sql_zapros as sqz
 from modules.get_minute import start_hour
 from modules.send_to_telegram import do_telega
-from modules.get_exbitron import get_exbitron
 
 
 def add_notify(rig_id, notification_type):
@@ -47,8 +46,6 @@ def notify_constructor():
                 send_text = f"{send_text}{row_status[1]}:\n"
                 for rig_status in rig_statuses:
                     send_text = f"{send_text}       {rig_status[0]}\n"
-    if start_hour():
-        send_text = get_exbitron() + send_text
     print(send_text)
     partes = razrez4096(send_text)
     for part in partes:
