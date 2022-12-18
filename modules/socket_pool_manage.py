@@ -16,7 +16,7 @@ def manager_sql(notify_id, action):
 
 
 def socket_manage():
-    # manager_sql("has_problem_reboot", "reboot")
+    manager_sql("has_problem_reboot", "reboot")
     manager_sql("overheat", "off")
     manager_sql("is_emergency", "off")
     manager_sql("too_long_silent_reboot", "reboot")
