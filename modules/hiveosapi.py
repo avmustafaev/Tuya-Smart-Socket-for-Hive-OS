@@ -25,8 +25,8 @@ def getrig(ferms_id):
         rig_stats = i.get("stats")
         is_online = rig_stats.get("online")
         is_watchdog_on = is_watchdoged(i.get("watchdog"), rig_name)
-        # has_problems = rig_has_problems(rig_stats.get("problems"), rig_name)
-        has_problems = False
+        has_problems = rig_has_problems(rig_stats.get("problems"), rig_name)
+        # has_problems = False
         rig_id = i.get("id")
         cort_upd = (rig_name, is_online, is_watchdog_on, has_problems, rig_id)
         cort_ins = (

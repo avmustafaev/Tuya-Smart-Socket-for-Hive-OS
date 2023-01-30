@@ -2,11 +2,11 @@ import os
 import sys
 
 from modules.connect_sql import sql_zapros as sqz
+from modules.get_minute import start_hour as start_hour
 from modules.make_requests import hiveos_api_patch
 from modules.make_requests import hiveos_requests_api as os_req_api
 from modules.notifiyer import add_notify
 from modules.send_to_telegram import do_telega
-from modules.get_minute import start_hour as start_hour
 
 sys.path.insert(0, "./")
 
@@ -88,7 +88,8 @@ def rig_has_problems(rig_problems, rig_name):
         return False
     isnt_prbmls = False
     for ii in rig_problems:
-        if ii not in ["has_invalid", "error_message"]:
+        if ii not in ["has_invalid", "error_message", "overload", "no_hashrate"]:
+            print(ii)
             add_notify(rig_name, ii)
             isnt_prbmls = ii != "overheat"
     return isnt_prbmls
