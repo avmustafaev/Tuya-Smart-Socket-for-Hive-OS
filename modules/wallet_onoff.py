@@ -88,7 +88,12 @@ def rig_has_problems(rig_problems, rig_name):
         return False
     isnt_prbmls = False
     for ii in rig_problems:
-        if ii not in ["has_invalid", "error_message", "no_hashrate"]: #, "overload", 
+        if ii not in [
+            "has_invalid",
+            "error_message",
+            "no_hashrate",
+            "missed_hashrate",
+        ]:  # , "overload",
             print(ii)
             add_notify(rig_name, ii)
             isnt_prbmls = ii != "overheat"
