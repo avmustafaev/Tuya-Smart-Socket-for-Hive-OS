@@ -12,7 +12,11 @@ def update_tuya_sockets():
     c = tinytuya.Cloud(
         sett.tuya_region, sett.tuya_api_key, sett.tuya_api_secret, sett.tuya_device_id
     )
+
     devices = c.getdevices()
+    error = devices.get("Error")
+    print(error)
+
 
     for i in devices:
         device_name = i.get("name")
