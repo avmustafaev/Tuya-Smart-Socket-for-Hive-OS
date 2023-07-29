@@ -1,12 +1,12 @@
 import os
 import sys
 
-from modules.connect_sql import sql_zapros as sqz
-from modules.get_minute import start_hour as start_hour
+from modules.lite_connector import sql_zapros as sqz
+from modules.start_hour import start_hour as start_hour
 from modules.make_requests import hiveos_api_patch
 from modules.make_requests import hiveos_requests_api as os_req_api
-from modules.notifiyer import add_notify
-from modules.send_to_telegram import do_telega
+from modules.notifyer import add_notify
+from modules.telega import do_telega
 
 sys.path.insert(0, "./")
 

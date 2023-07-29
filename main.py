@@ -9,30 +9,28 @@ from modules.check import (
     unemergency,
     wakeuped,
 )
-from modules.connect_sql import backup_db, db_not_exists, init_db
-from modules.hiveosapi import getfarm
-from modules.notifiyer import notify_constructor
-from modules.send_to_telegram import do_telega
-from modules.settings import pause
+from modules.hive_sync import getfarm
+from modules.lite_connector import LiteConnector
+from modules.loadenvi import Envi
+from modules.my_tuya import update_tuya_sockets
+from modules.notifyer import notify_constructor
 from modules.socket_pool_manage import socket_manage
-from modules.tuya import update_tuya_sockets
+from modules.telega import do_telega
 from modules.wallet_onoff import is_not_pause
+
+envii = Envi()
+litecon = LiteConnector()
 
 
 def main():
-    if db_not_exists():
-        print("Создаётся пустая БД")
-        init_db()
-        print("Запрашивается список ферм")
-        getfarm()
-        update_tuya_sockets()
-
+    getfarm()
+    update_tuya_sockets()
     while True:
         if is_not_pause():
             print("Скрипт в боевом режиме!")
             do_actions_sequence()
-        print(f"Пауза {pause + 10} секунд , до следующей отработки цикла...")
-        sleep(pause + 10)
+        print(f"Пауза {envii.pause + 10} секунд , до следующей отработки цикла...")
+        sleep(envii.pause + 10)
 
 
 def do_actions_sequence():
@@ -47,7 +45,7 @@ def do_actions_sequence():
     bez_rozetki()
     notify_constructor()
     socket_manage()
-    backup_db()
+    litecon.backup_db()
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
 import sys
 
-from modules.connect_sql import sql_zapros as sqz
-from modules.hiveosapi import getfarm
-from modules.tuya import update_tuya_sockets
+from modules.lite_connector import sql_zapros as sqz
+from modules.hive_sync import getfarm
+from modules.my_tuya import update_tuya_sockets
 
 sys.path.insert(0, "./")
 

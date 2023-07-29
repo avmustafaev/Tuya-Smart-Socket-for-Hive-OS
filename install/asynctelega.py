@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, "./")
 
 from aiogram import Bot, Dispatcher, executor, types
-import modules.settings as sett
+import modules.loadenvi as sett
 
 
 

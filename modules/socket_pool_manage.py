@@ -1,6 +1,6 @@
-from modules.connect_sql import sql_zapros as sqz
+from modules.lite_connector import sql_zapros as sqz
 from modules.func import do_rozetka
-from modules.send_to_telegram import do_telega
+from modules.telega import do_telega
 from modules.wallet_onoff import pause_on
 
 

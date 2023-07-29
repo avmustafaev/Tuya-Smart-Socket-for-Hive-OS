@@ -2,8 +2,8 @@ import time
 
 import tinytuya
 
-import modules.settings as sett
-from modules.connect_sql import sql_zapros as sqz
+import modules.loadenvi as sett
+from modules.lite_connector import sql_zapros as sqz
 
 
 def select_sw(rig_id):
