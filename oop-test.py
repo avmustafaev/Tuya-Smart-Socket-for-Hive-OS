@@ -2,6 +2,7 @@ from time import sleep
 
 import tinytuya
 
+from modules.check import CheckUp
 from modules.check_onoff import WalletPause
 from modules.hive_sync import HiveSync
 from modules.lite_connector import LiteConnector
@@ -19,6 +20,13 @@ def main():
     starthour = StartHour(envii.minutes_window)
     litecon = LiteConnector()
     notify = Notifyer(litecon, telegramer, starthour)
+    checkup = CheckUp(
+        litecon.request,
+        notify.add_notify,
+        telegramer.do_telega,
+        envii.pause,
+        False,
+    )
     hivesync = HiveSync(litecon, envii.hiveos_api, notify)
 
     tuyaconnector = tinytuya.Cloud(
@@ -43,13 +51,17 @@ def main():
     while True:
         if onoff.is_not_pause():
             print("Скрипт в боевом режиме!")
-            do_actions_sequence()
+            checkup.unemergency()
+            checkup.wakeuped()
+            checkup.probably_sleeping()
+            checkup.rebooting()
+            checkup.re_problems()
+            checkup.do_emergency()
+            checkup.bez_rozetki()
+            notify.notify_constructor()
+            litecon.backup_db()
         print(f"Пауза {envii.pause + 10} секунд , до следующей отработки цикла...")
         sleep(envii.pause + 10)
-
-
-def do_actions_sequence():
-    pass
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
-from modules.lite_connector import sql_zapros as sqz
-from modules.func import do_rozetka
-from modules.telega import do_telega
 from modules.check_onoff import pause_on
+from modules.func import do_rozetka
+from modules.lite_connector import sql_zapros as sqz
+from modules.telega import do_telega
 
 
 def manager_sql(notify_id, action):

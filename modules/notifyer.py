@@ -1,4 +1,3 @@
-
 class Notifyer:
     def __init__(self, connector, telega, start_hour) -> None:
         self.connector = connector
