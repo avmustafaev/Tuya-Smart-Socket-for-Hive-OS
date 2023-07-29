@@ -4,7 +4,7 @@ from modules.lite_connector import sql_zapros as sqz
 from modules.notifyer import add_notify
 from modules.telega import do_telega
 from modules.loadenvi import pause
-from modules.wallet_onoff import pause_on
+from modules.check_onoff import pause_on
 
 """В этом модуле прописана вся логика
 осталось ещё из модуля hiveosapi вынести лишгюю логику оттуда сюда

@@ -7,9 +7,7 @@ class LiteConnector:
         self.conn = sqlite3.connect(":memory:")
         self.cursor = self.conn.cursor()
         if self.db_not_exists():
-            print(self.db_not_exists())
             self.init_db()
-            print(self.db_not_exists())
 
     def db_not_exists(self):
         self.cursor.execute(

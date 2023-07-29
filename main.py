@@ -9,6 +9,7 @@ from modules.check import (
     unemergency,
     wakeuped,
 )
+from modules.check_onoff import is_not_pause
 from modules.hive_sync import getfarm
 from modules.lite_connector import LiteConnector
 from modules.loadenvi import Envi
@@ -16,7 +17,6 @@ from modules.my_tuya import update_tuya_sockets
 from modules.notifyer import notify_constructor
 from modules.socket_pool_manage import socket_manage
 from modules.telega import do_telega
-from modules.wallet_onoff import is_not_pause
 
 envii = Envi()
 litecon = LiteConnector()

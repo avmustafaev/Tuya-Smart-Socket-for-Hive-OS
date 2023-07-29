@@ -2,17 +2,13 @@ class MyTuya:
     def __init__(self, tuyaconnector, connector) -> None:
         self.tuya = tuyaconnector
         self.sqlreq = connector
-        self.update_tuya_sockets()
+        # self.update_tuya_sockets()
 
     def update_tuya_sockets(self):
         device_id = ""
         device_key = ""
         device_name = ""
         devices = self.tuya.getdevices()
-        print(devices)
-        error = devices.get("Error")
-        print(error)
-        print("----------")
         for i in devices:
             device_name = i.get("name")
             device_id = i.get("id")

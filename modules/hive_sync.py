@@ -8,8 +8,6 @@ class HiveSync:
         self.osapi = os_api
         self.litecon = litecon
         self.notify = notify
-        print(self.osapi)
-        print(self.litecon)
         self.getfarm()
 
     def getrig(self):
