@@ -138,7 +138,6 @@ test.db
 modules/tmp.py
 db/data.db
 txbit_tel.py
-oop-test.py
 .trunk/
 .markdownlint.yaml
 .isort.cfg
