@@ -74,6 +74,7 @@ def main():
     while True:
         if onoff.is_not_pause():
             print("Скрипт в боевом режиме!")
+            hivesync.getfarm()
             checkup.go()
             notify.notify_constructor()
             socket_manager.socket_manage()

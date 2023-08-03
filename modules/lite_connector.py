@@ -4,8 +4,8 @@ import sqlite3
 
 class LiteConnector:
     def __init__(self):
-        # self.conn = sqlite3.connect(":memory:")
-        self.conn = sqlite3.connect(os.path.join("db", "data.db"))
+        self.conn = sqlite3.connect(":memory:")
+        # self.conn = sqlite3.connect(os.path.join("db", "data.db"))
         self.cursor = self.conn.cursor()
         if self.db_not_exists():
             self.init_db()
