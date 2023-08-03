@@ -1,14 +1,10 @@
-import json
-
-import requests
-
-
 class HiveSync:
-    def __init__(self, litecon, os_api, notify) -> None:
+    def __init__(self, litecon, os_api, notify, iswatchdog, hive_api) -> None:
         self.osapi = os_api
         self.litecon = litecon
         self.notify = notify
-        self.getfarm()
+        self.wtchdog = iswatchdog
+        self.hiveos_requests_api = hive_api
 
     def getrig(self):
         rig_response = self.getrigs_api(self.farms_id)
@@ -23,14 +19,12 @@ class HiveSync:
 
         for i in rig_response:
             rig_name = self.del_octothorpe(i.get("name"))  # вернуть октофор
-            print(rig_name)
             rig_stats = i.get("stats")
             is_online = rig_stats.get("online")
-            # is_watchdog_on = is_watchdoged(i.get("watchdog"), rig_name)
-            is_watchdog_on = False
-            # has_problems = rig_has_problems(rig_stats.get("problems"), rig_name)
-            has_problems = False
-            # has_problems = False
+            is_watchdog_on = self.wtchdog.is_watchdoged(i.get("watchdog"), rig_name)
+            has_problems = self.wtchdog.rig_has_problems(
+                rig_stats.get("problems"), rig_name
+            )
             rig_id = i.get("id")
             cort_upd = (rig_name, is_online, is_watchdog_on, has_problems, rig_id)
             cort_ins = (
@@ -63,29 +57,8 @@ class HiveSync:
     def del_octothorpe(self, has_octothorpe):
         clean_string = has_octothorpe.replace("#", "")
         if has_octothorpe != clean_string:
-            print()
             self.notify.add_notify(clean_string, "clean_string")
         return clean_string
-
-    def hiveos_requests_api(self, requests_part):
-        url = "https://api2.hiveos.farm/api/v2/farms"
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.osapi}",
-        }
-        url_full = f"{url}/{requests_part}" if requests_part != "" else url
-        response_from_api = requests.get(url_full, headers=headers)
-        return response_from_api.json()
-
-    def hiveos_api_patch(self, wallet_id):
-        url = f"https://api2.hiveos.farm/api/v2/wallets/{wallet_id}"
-        part = json.dumps({"wal": "0"})
-        print(part)
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.osapi}",
-        }
-        return requests.patch(url, headers=headers, data=part)
 
     def getfarms_api(self):
         return self.hiveos_requests_api("")["data"]

@@ -2,14 +2,20 @@ from datetime import datetime as dtime
 
 
 class CheckUp:
-    def __init__(self, sqlconnector, notifyer, telega, envpause, pause_on) -> None:
+    def __init__(
+        self,
+        sqlconnector,
+        notifyer,
+        telega,
+        envpause,
+    ) -> None:
         self.sqlreq = sqlconnector
         self.add_notify = notifyer
         self.do_tlgrm = telega
         self.pause = envpause
-        self.pause_on = pause_on
+        self.pause_on = False
 
-    def wakeuped(self):
+    def _wakeuped(self):
         sql_string = (
             "SELECT rig_status, rig_name "
             "FROM hive2 "
@@ -30,7 +36,7 @@ class CheckUp:
         )
         self.sqlreq(sql_string2, ())
 
-    def probably_sleeping(self):
+    def _probably_sleeping(self):
         sql_string1 = (
             "SELECT rig_name "
             "FROM hive2 "
@@ -47,7 +53,7 @@ class CheckUp:
         )
         self.sqlreq(sql_string2, (dtime.now(),))
 
-    def bez_rozetki(self):
+    def _bez_rozetki(self):
         timenow = dtime.now()
         sql_string1 = (
             "SELECT rig_name, rig_id "
@@ -64,7 +70,7 @@ class CheckUp:
             )
             self.sqlreq(sql_string2, (timenow, row[1]))
 
-    def rebooting(self):
+    def _rebooting(self):
         timenow = dtime.now()
         sql_string1 = (
             "SELECT time, rig_name, rozetka_id, rig_id "
@@ -74,7 +80,7 @@ class CheckUp:
         )
         rows = self.sqlreq(sql_string1, ())
         for row in rows:
-            if self.pause_on():
+            if self.pause_on:
                 self.do_tlgrm("⏸ Поставлен на паузу!")
                 break
             diff = timenow - dtime.strptime(row[0], "%Y-%m-%d %H:%M:%S.%f")
@@ -89,7 +95,7 @@ class CheckUp:
                 )
                 self.sqlreq(sql_string2, (timenow, row[3]))
 
-    def re_problems(self):
+    def _re_problems(self):
         timenow = dtime.now()
         sql_string = (
             "SELECT rig_name, rozetka_id, rig_id "
@@ -99,7 +105,7 @@ class CheckUp:
         )
         rows = self.sqlreq(sql_string, ())
         for row in rows:
-            if self.pause_on():
+            if self.pause_on:
                 self.do_tlgrm("⏸ Поставлен на паузу!")
                 break
             self.add_notify(row[0], "has_problem_reboot")
@@ -110,7 +116,7 @@ class CheckUp:
             )
             self.sqlreq(sql_string_2, (timenow, row[2]))
 
-    def do_emergency(self):
+    def _do_emergency(self):
         timenow = dtime.now()
         sql_string = (
             "SELECT time, rig_name, rozetka_id, rig_id "
@@ -120,7 +126,7 @@ class CheckUp:
         )
         rows = self.sqlreq(sql_string, ())
         for row in rows:
-            if self.pause_on():
+            if self.pause_on:
                 self.do_tlgrm("⏸ Поставлен на паузу!")
                 break
             diff = timenow - dtime.strptime(row[0], "%Y-%m-%d %H:%M:%S.%f")
@@ -135,7 +141,7 @@ class CheckUp:
                 )
                 self.sqlreq(sql_string_2, (timenow, row[3]))
 
-    def unemergency(self):
+    def _unemergency(self):
         sql_string1 = (
             "SELECT rozetka_id, rig_name "
             "FROM hive2 "
@@ -143,9 +149,18 @@ class CheckUp:
             'rig_status = "emergency" and rig_online = False and is_watchdog = True'
         )
         rows = self.sqlreq(sql_string1, ())
-        print(rows)
+        print("unemergency:: ", rows)
         for row in rows:
-            if self.pause_on():
+            if self.pause_on:
                 self.do_tlgrm("⏸ Поставлен на паузу!")
                 break
             self.add_notify(row[1], "heal_try")
+
+    def go(self):
+        self._unemergency()
+        self._wakeuped()
+        self._probably_sleeping()
+        self._rebooting()
+        self._re_problems()
+        self._do_emergency()
+        self._bez_rozetki()

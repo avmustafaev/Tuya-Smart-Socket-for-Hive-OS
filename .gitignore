@@ -137,6 +137,7 @@ test.db
 .DS_Store
 modules/tmp.py
 db/data.db
+db/data_bk.db
 txbit_tel.py
 .trunk/
 .markdownlint.yaml

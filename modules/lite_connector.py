@@ -4,7 +4,8 @@ import sqlite3
 
 class LiteConnector:
     def __init__(self):
-        self.conn = sqlite3.connect(":memory:")
+        # self.conn = sqlite3.connect(":memory:")
+        self.conn = sqlite3.connect(os.path.join("db", "data.db"))
         self.cursor = self.conn.cursor()
         if self.db_not_exists():
             self.init_db()
@@ -23,7 +24,7 @@ class LiteConnector:
         self.conn.commit()
 
     def backup_db(self):
-        self.conn_back = sqlite3.connect(os.path.join("db", "data.db"))
+        self.conn_back = sqlite3.connect(os.path.join("db", "data_bk.db"))
         self.conn.backup(self.conn_back)
         self.conn.commit()
         self.conn_back.commit()

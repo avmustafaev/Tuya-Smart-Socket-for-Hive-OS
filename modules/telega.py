@@ -7,6 +7,7 @@ class SendTelega:
         self.chat_id = env.chat_id
 
     def do_telega(self, part):
+        print(part)
         requests.get(
             f"https://api.telegram.org/bot{self.tel_api}/sendMessage?text={part}&chat_id={self.chat_id}"
         )
