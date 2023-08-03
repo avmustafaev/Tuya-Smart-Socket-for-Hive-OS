@@ -14,6 +14,7 @@ from modules.notifyer import Notifyer
 from modules.socket_pool_manage import SocketPoolManager
 from modules.start_hour import StartHour
 from modules.telega import SendTelega
+from modules.trasfer2emergency import TransferToEmergency
 
 
 def main():
@@ -63,9 +64,15 @@ def main():
         litecon.request,
         tuyaconnector,
     )
+    tr = TransferToEmergency(
+        envii.hiveos_api,
+        litecon.request,
+        telegramer.do_telega,
+    )
     socket_manager = SocketPoolManager(
         litecon.request,
         do_switcher.do_rozetka,
+        tr.transfer,
     )
     hivesync.getfarm()
     mytuya.update_tuya_sockets()

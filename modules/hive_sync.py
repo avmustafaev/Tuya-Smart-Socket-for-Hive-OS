@@ -10,11 +10,11 @@ class HiveSync:
         rig_response = self.getrigs_api(self.farms_id)
         sql_upd_string = (
             "UPDATE hive2 "
-            "SET rig_name=?, rig_online = ?, is_watchdog = ?, has_problems = ? "
+            "SET farm_id=?, rig_name=?, rig_online = ?, is_watchdog = ?, has_problems = ? "
             "WHERE rig_id = ?"
         )
         sql_ins_ignore_str = (
-            "INSERT OR IGNORE INTO hive2 VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+            "INSERT OR IGNORE INTO hive2 VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
         )
 
         for i in rig_response:
@@ -26,8 +26,16 @@ class HiveSync:
                 rig_stats.get("problems"), rig_name
             )
             rig_id = i.get("id")
-            cort_upd = (rig_name, is_online, is_watchdog_on, has_problems, rig_id)
+            cort_upd = (
+                self.farms_id,
+                rig_name,
+                is_online,
+                is_watchdog_on,
+                has_problems,
+                rig_id,
+            )
             cort_ins = (
+                self.farms_id,
                 rig_id,
                 rig_name,
                 is_online,

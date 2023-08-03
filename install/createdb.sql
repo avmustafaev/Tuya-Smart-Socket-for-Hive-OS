@@ -4,6 +4,7 @@ CREATE TABLE farms_id (
 );
 
 CREATE TABLE hive2 (
+    farm_id        STRING,
     rig_id         STRING   UNIQUE ON CONFLICT ABORT,
     rig_name       STRING,
     rig_online     BOOLEAN,
