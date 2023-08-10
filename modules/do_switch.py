@@ -1,4 +1,4 @@
-import time
+# import time
 
 
 class DoSwitch:
@@ -46,8 +46,8 @@ class DoSwitch:
         if doing == "reboot":
             result = self.mytuya.sendcommand(roz_id, commands_off)
             print(doing, result)
-            time.sleep(20)
-            result = self.mytuya.sendcommand(roz_id, commands_on)
+            # time.sleep(20)
+            # result = self.mytuya.sendcommand(roz_id, commands_on)
             print(doing, result)
         if doing == "off":
             result = self.mytuya.sendcommand(roz_id, commands_off)
