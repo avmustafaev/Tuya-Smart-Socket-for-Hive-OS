@@ -37,4 +37,4 @@ class SocketPoolManager:
             #     do_telega("⏸ Поставлен на паузу!")
             #     break
             self.do_rozetka(socket[0], action)
-            self.transfer(socket[0])
+            #self.transfer(socket[0])
