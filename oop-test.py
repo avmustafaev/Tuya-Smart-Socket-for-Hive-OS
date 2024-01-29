@@ -2,6 +2,8 @@ from time import sleep
 
 import tinytuya
 
+# test
+
 from modules.check import CheckUp
 from modules.check_onoff import WalletPause
 from modules.do_switch import DoSwitch
@@ -92,3 +94,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
