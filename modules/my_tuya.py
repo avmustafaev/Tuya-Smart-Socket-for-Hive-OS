@@ -9,7 +9,6 @@ class MyTuya:
         device_key = ""
         device_name = ""
         devices = self.tuya.getdevices()
-        print(devices)
         for i in devices:
             device_name = i.get('name')
             device_id = i.get('id')
