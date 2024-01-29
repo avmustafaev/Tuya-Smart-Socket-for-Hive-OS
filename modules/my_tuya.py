@@ -10,9 +10,9 @@ class MyTuya:
         device_name = ""
         devices = self.tuya.getdevices()
         for i in devices:
-            device_name = i.get("name")
-            device_id = i.get("id")
-            device_key = i.get("key")
+            device_name = i.get('name')
+            device_id = i.get('id')
+            device_key = i.get('key')
             sw_name = ""
             result = self.tuya.getstatus(device_id)["result"]
             for x in result:
