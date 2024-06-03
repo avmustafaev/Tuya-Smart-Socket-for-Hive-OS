@@ -51,6 +51,7 @@ class WalletPause:
                 "error_message",
                 "no_hashrate",
                 "missed_hashrate",
+                "overload",
             ]:  # , "overload",
                 print(ii)
                 self.add_notify(rig_name, ii)
