@@ -1,0 +1,13 @@
+services:
+  rozetki:
+    build: .
+    environment:
+      - TELEGRAM_API=${TELEGRAM_API}
+      - HIVEOS_API=${HIVEOS_API}
+      - TUYA_API_KEY=${TUYA_API_KEY}
+      - TUYA_API_SECRET=${TUYA_API_SECRET}
+      - TUYA_DEVICE_ID=${TUYA_DEVICE_ID}
+      - TUYA_REGION=${TUYA_REGION}
+      - CHAT_ID=${CHAT_ID}
+      - PAUSE=${PAUSE}
+      - MINUTES_WINDOW=${MINUTES_WINDOW}
