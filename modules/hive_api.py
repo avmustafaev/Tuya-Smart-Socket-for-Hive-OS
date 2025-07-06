@@ -25,8 +25,8 @@ class HiveAPI:
             self.telegramer.do_telega(f"Error: {response_from_api.status_code}, sleep 10sec, and repeat...")
             sleep(10)
             response_from_api = requests.get(url_full, headers=headers)
-        print("good connect to api hive os!")
-        self.telegramer.do_telega("good connect to api hive os!")
+            if response_from_api.status_code == 200:
+                self.telegramer.do_telega("good connect to api hive os!")
         return response_from_api.json()
 
     def hiveos_api_patch(self, wallet_id):
