@@ -18,16 +18,18 @@ class MyTuya:
             result = self.tuya.getstatus(device_id)["result"]
             for x in result:
                 name = x.get("code")
-                val = x.get("value")
+                print(name)
+                #val = x.get("value")
                 if name in ["switch_1", "switch"]:
-                    print(
-                        f"☣️ smart socket: {device_name} | "
-                        f"id:{device_id} | "
-                        f"key:{device_key} | "
-                        f"on:{str(val)} | "
-                        f"code:{str(name)}"
-                    )
+                    # print(
+                    #     f"☣️ smart socket: {device_name} | "
+                    #     f"id:{device_id} | "
+                    #     f"key:{device_key} | "
+                    #     f"on:{str(val)} | "
+                    #     f"code:{str(name)}"
+                    # )
                     sw_name = name
+                    break
             tu = (sw_name, device_id, device_key, device_name)
             sql_string1 = (
                 "UPDATE hive2 "
