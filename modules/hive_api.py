@@ -21,7 +21,6 @@ class HiveAPI:
         print("try connect hive os api...")
         response_from_api = requests.get(url_full, headers=headers) 
         while response_from_api.status_code != 200:
-            print(f"Error: {response_from_api.status_code}, sleep 10sec, and repeat...")
             self.telegramer.do_telega(f"Error: {response_from_api.status_code}, sleep 10sec, and repeat...")
             sleep(10)
             response_from_api = requests.get(url_full, headers=headers)
