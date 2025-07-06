@@ -9,7 +9,7 @@ class HiveAPI:
     def __init__(self, osapi) -> None:
         self.osapi = osapi
         self.envii = Envi()
-        self.telegramer = SendTelega(envii)
+        self.telegramer = SendTelega(self.envii)
 
     def hiveos_requests_api(self, requests_part):
         url = "https://api2.hiveos.farm/api/v2/farms"
