@@ -43,6 +43,8 @@ def main():
         starthour.start_hour,
         notify.add_notify,
     )
+    
+    
     hivesync = HiveSync(
         litecon,
         envii.hiveos_api,
@@ -93,4 +95,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

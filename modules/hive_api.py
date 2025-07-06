@@ -9,12 +9,15 @@ class HiveAPI:
 
     def hiveos_requests_api(self, requests_part):
         url = "https://api2.hiveos.farm/api/v2/farms"
+        print("***")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.osapi}",
         }
         url_full = f"{url}/{requests_part}" if requests_part != "" else url
         response_from_api = requests.get(url_full, headers=headers)
+        print(url_full)
+        print(response_from_api.status_code)
         return response_from_api.json()
 
     def hiveos_api_patch(self, wallet_id):

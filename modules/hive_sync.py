@@ -53,6 +53,7 @@ class HiveSync:
 
     def getfarm(self):
         farms_response = self.getfarms_api()
+        #print(farms_response)
         sql_string1 = "UPDATE farms_id SET farm_name = ? where farm_id = ?"
         sql_string2 = "INSERT OR IGNORE INTO farms_id VALUES (?,?)"
         for a in farms_response:
