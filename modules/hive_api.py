@@ -20,7 +20,7 @@ class HiveAPI:
     def hiveos_api_patch(self, wallet_id):
         url = f"https://api2.hiveos.farm/api/v2/wallets/{wallet_id}"
         part = json.dumps({"wal": "0"})
-        print(part)
+        #print(part)
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.osapi}",
