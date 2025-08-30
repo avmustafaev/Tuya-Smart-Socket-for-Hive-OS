@@ -1,54 +1,58 @@
 class Notifyer:
-    def __init__(self, connector, telega, start_hour) -> None:
+    def __init__(self, connector, telega, start_hour):
         self.connector = connector
         self.telega = telega
-        self.start_hour = start_hour.start_hour
+        self.start_hour = start_hour  # Исправлено: сохраняем значение напрямую
 
     def add_notify(self, rig_id, notification_type):
         sql_string = "INSERT OR IGNORE INTO notify_pool VALUES (?,?)"
         self.connector.request(sql_string, (rig_id, notification_type))
 
-    def razrez4096(self, message):
-        parts = [""]
-        while len(message) > 0:
-            if len(message) > 4096:
-                partw = message[:4096]
-                first_lnbr = partw.rfind("\n")
-                if first_lnbr != -1:
-                    parts.append(partw[:first_lnbr])
-                    message = message[first_lnbr:]
-                else:
-                    parts.append(partw)
-                    message = message[4096:]
-            else:
-                parts.append(message)
-                break
+    def split_message(self, message, max_length=4096):
+        """Разбивает сообщение на части до max_length, учитывая переводы строк."""
+        parts = []
+        while len(message) > max_length:
+            # Находим последний перевод строки в пределах max_length
+            split_pos = message.rfind('\n', 0, max_length)
+            if split_pos == -1:
+                split_pos = max_length  # Если нет перевода строки, разделяем по длине
+            parts.append(message[:split_pos])
+            message = message[split_pos:]  # Остальная часть сообщения
+        parts.append(message)
         return parts
 
     def notify_constructor(self):
         send_text = ""
         sql_string = "SELECT status_id, status_text FROM comparison"
-        sql_string2 = "SELECT rig_id FROM notify_pool WHERE notify_id = ? "
+        sql_string2 = "SELECT rig_id FROM notify_pool WHERE notify_id = ?"
+        
+        # Получаем статусы
         statuses = self.connector.request(sql_string, ())
-        # очистка уведомлений об игнорируемых ригах
-        if not self.start_hour():
+        
+        # Очистка уведомлений об игнорируемых ригах
+        if not self.start_hour:
             cleared_rig_ids = self.connector.request(sql_string2, ("rig_ignored",))
-            sql_del_string = "DELETE FROM notify_pool WHERE rig_id = ? "
-            for del_rig in cleared_rig_ids:
-                self.connector.request(sql_del_string, (del_rig[0],))
-        # конец очистки
+            delete_query = "DELETE FROM notify_pool WHERE rig_id = ?"
+            for rig_id in cleared_rig_ids:
+                self.connector.request(delete_query, (rig_id[0],))
+        
+        # Формируем текст уведомления
         for row_status in statuses:
-            if (
-                row_status[0] == "rig_ignored"
-                and self.start_hour()
-                or row_status[0] != "rig_ignored"
-            ):
+            if row_status[0] == "rig_ignored":
+                if self.start_hour:
+                    rig_statuses = self.connector.request(sql_string2, (row_status[0],))
+                    if rig_statuses:
+                        send_text += f"{row_status[1]}:\n"
+                        for rig_status in rig_statuses:
+                            send_text += f"       {rig_status[0]}\n"
+            else:
                 rig_statuses = self.connector.request(sql_string2, (row_status[0],))
-                if len(rig_statuses) != 0:
-                    send_text = f"{send_text}{row_status[1]}:\n"
+                if rig_statuses:
+                    send_text += f"{row_status[1]}:\n"
                     for rig_status in rig_statuses:
-                        send_text = f"{send_text}       {rig_status[0]}\n"
-        print(send_text)
-        partes = self.razrez4096(send_text)
-        for part in partes:
+                        send_text += f"       {rig_status[0]}\n"
+        
+        # Разбиваем и отправляем сообщение
+        message_parts = self.split_message(send_text)
+        for part in message_parts:
             self.telega.do_telega(part)
