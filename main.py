@@ -1,5 +1,5 @@
 from time import sleep
-from tinytuya import Cloud
+from tinytuya import Cloud as rozcloud
 
 # test
 
@@ -59,7 +59,7 @@ def main():
     hivesync.getfarm()
     telegramer.do_telega("Данные с фермы получены")
     print(envii.tuya_api_key,envii.tuya_region,envii.tuya_api_secret,envii.tuya_device_id)
-    tuyaconnector = Cloud(
+    tuyaconnector = rozcloud(
         envii.tuya_region,
         envii.tuya_api_key,
         envii.tuya_api_secret,
