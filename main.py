@@ -64,6 +64,7 @@ def main():
         envii.tuya_api_key,
         envii.tuya_api_secret,
         envii.tuya_device_id,
+        new_sign_algorithm = True, initial_token= None
     )
     print(tuyaconnector.error)
     telegramer.do_telega("туйя активирована")

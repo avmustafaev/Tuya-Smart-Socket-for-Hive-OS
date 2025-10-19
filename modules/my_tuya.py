@@ -1,3 +1,5 @@
+#from tinytuya import Cloud as tuyacloud
+
 class MyTuya:
     def __init__(self, tuyaconnector, connector) -> None:
         self.tuya = tuyaconnector
