@@ -25,6 +25,7 @@ def main():
     telegramer.do_telega("🚀 Запуск скрипта на сервере.. ")
     starthour = StartHour(envii.minutes_window)
     litecon = LiteConnector()
+    telegramer.do_telega("База подключена")
     notify = Notifyer(
         litecon,
         telegramer,
@@ -77,9 +78,12 @@ def main():
         do_switcher.do_rozetka,
         tr.transfer,
     )
+    telegramer.do_telega("Запуск цикла")
     hivesync.getfarm()
+    telegramer.do_telega("Данные с фермы получены")
     mytuya.update_tuya_sockets()
-    litecon.backup_db()
+    telegramer.do_telega("Розетки обновлены")
+    #litecon.backup_db()
 
     while True:
         if onoff.is_not_pause():
