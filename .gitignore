@@ -144,3 +144,4 @@ txbit_tel.py
 .isort.cfg
 .flake8
 env/
+.vscode/settings.json
