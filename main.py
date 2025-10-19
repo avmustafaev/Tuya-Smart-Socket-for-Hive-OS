@@ -1,7 +1,4 @@
 from time import sleep
-from tinytuya import Cloud as rozcloud
-
-# test
 
 from modules.check import CheckUp
 from modules.check_onoff import WalletPause
@@ -16,6 +13,7 @@ from modules.socket_pool_manage import SocketPoolManager
 from modules.start_hour import StartHour
 from modules.telega import SendTelega
 from modules.trasfer2emergency import TransferToEmergency
+from modules.tuyacloud import Cloud as rozcloud
 
 
 def main():
@@ -63,8 +61,7 @@ def main():
         envii.tuya_region,
         envii.tuya_api_key,
         envii.tuya_api_secret,
-        envii.tuya_device_id,
-        new_sign_algorithm = True, initial_token= None
+        envii.tuya_device_id
     )
     print(tuyaconnector.error)
     telegramer.do_telega("туйя активирована")
