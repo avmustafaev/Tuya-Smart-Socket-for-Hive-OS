@@ -56,6 +56,8 @@ def main():
         hive_api.hiveos_requests_api,
     )
     telegramer.do_telega("хайв активирован")
+    hivesync.getfarm()
+    telegramer.do_telega("Данные с фермы получены")
     tuyaconnector = tinytuya.Cloud(
         envii.tuya_region,
         envii.tuya_api_key,
@@ -86,7 +88,7 @@ def main():
         tr.transfer,
     )
     telegramer.do_telega("Запуск цикла")
-    hivesync.getfarm()
+    #hivesync.getfarm()
     telegramer.do_telega("Данные с фермы получены")
     mytuya.update_tuya_sockets()
     telegramer.do_telega("Розетки обновлены")
