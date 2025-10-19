@@ -62,6 +62,7 @@ def main():
         envii.tuya_api_secret,
         envii.tuya_device_id,
     )
+    print(tuyaconnector.error)
     telegramer.do_telega("туйя активирована")
     mytuya = MyTuya(
         tuyaconnector,
