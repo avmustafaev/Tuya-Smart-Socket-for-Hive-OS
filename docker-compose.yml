@@ -1,6 +1,8 @@
 services:
-  rozetki:
+  tuya-smart-socket:
     build: .
+    container_name: tuya-smart-socket
+    restart: unless-stopped
     environment:
       - TELEGRAM_API=${TELEGRAM_API}
       - HIVEOS_API=${HIVEOS_API}
@@ -11,3 +13,15 @@ services:
       - CHAT_ID=${CHAT_ID}
       - PAUSE=${PAUSE}
       - MINUTES_WINDOW=${MINUTES_WINDOW}
+    volumes:
+      - db_data:/app/db
+      - ./.env:/app/.env:ro
+    networks:
+      - smart-socket-network
+volumes:
+  db_data:
+
+
+networks:
+  smart-socket-network:
+    driver: bridge
