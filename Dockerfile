@@ -29,4 +29,4 @@ RUN mkdir -p /app/db
 RUN chmod -R 755 /app/db
 
 # Команда запуска приложения
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
