@@ -19,11 +19,18 @@ class HiveAPI:
         }
         url_full = f"{url}/{requests_part}" if requests_part != "" else url
         print("try connect hive os api...")
-        response_from_api = requests.get(url_full, headers=headers) 
+        response_from_api = requests.get(url_full, headers=headers, timeout=30)
         while response_from_api.status_code != 200:
             self.telegramer.do_telega(f"Error: {response_from_api.status_code}, sleep 10sec, and repeat...")
             sleep(10)
-            response_from_api = requests.get(url_full, headers=headers)
+            try:
+                response_from_api = requests.get(url_full, headers=headers, timeout=30)
+            except requests.exceptions.Timeout:
+                print("Request timeout, retrying...")
+                continue
+            except requests.exceptions.RequestException as e:
+                print(f"Request error: {e}, retrying...")
+                continue
             if response_from_api.status_code == 200:
                 self.telegramer.do_telega("good connect to api hive os!")
         return response_from_api.json()
