@@ -18,7 +18,7 @@ class HiveAPI:
             "Authorization": f"Bearer {self.osapi}",
         }
         url_full = f"{url}/{requests_part}" if requests_part != "" else url
-        print("try connect hive os api...")
+        print("try connect hive os api....")
         response_from_api = requests.get(url_full, headers=headers) 
         while response_from_api.status_code != 200:
             self.telegramer.do_telega(f"Error: {response_from_api.status_code}, sleep 10sec, and repeat...")
