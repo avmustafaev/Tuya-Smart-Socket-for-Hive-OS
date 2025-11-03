@@ -23,20 +23,17 @@ def main():
     telegramer.do_telega("🚀 Запуск скрипта на сервере.. ")
     starthour = StartHour(envii.minutes_window)
     litecon = LiteConnector()
-    telegramer.do_telega("База подключена")
     notify = Notifyer(
         litecon,
         telegramer,
         starthour,
     )
-    telegramer.do_telega("уведомления активированы")
     checkup = CheckUp(
         litecon.request,
         notify.add_notify,
         telegramer.do_telega,
         envii.pause,
     )
-    telegramer.do_telega("чекап активирован")
     onoff = WalletPause(
         litecon.request,
         hive_api.hiveos_requests_api,
@@ -44,7 +41,6 @@ def main():
         starthour.start_hour,
         notify.add_notify,
     )
-    telegramer.do_telega("пауза проверка активирована")
     
     hivesync = HiveSync(
         litecon,
@@ -53,7 +49,7 @@ def main():
         onoff,
         hive_api.hiveos_requests_api,
     )
-    telegramer.do_telega("хайв активирован")
+
     hivesync.getfarm()
     telegramer.do_telega("Данные с фермы получены")
     print(envii.tuya_api_key,envii.tuya_region,envii.tuya_api_secret,envii.tuya_device_id)
@@ -64,29 +60,29 @@ def main():
         envii.tuya_device_id
     )
     print(tuyaconnector.error)
-    telegramer.do_telega("туйя активирована")
+
     mytuya = MyTuya(
         tuyaconnector,
         litecon.request,
     )
-    telegramer.do_telega("обработчик туйи активирован")
+
     do_switcher = DoSwitch(
         litecon.request,
         tuyaconnector,
     )
-    telegramer.do_telega("обработчик розеток активирован")
+
     tr = TransferToEmergency(
         envii.hiveos_api,
         litecon.request,
         telegramer.do_telega,
     )
-    telegramer.do_telega("шаг 7")
+
     socket_manager = SocketPoolManager(
         litecon.request,
         do_switcher.do_rozetka,
         tr.transfer,
     )
-    telegramer.do_telega("Запуск цикла")
+
     #hivesync.getfarm()
     telegramer.do_telega("Данные с фермы получены")
     mytuya.update_tuya_sockets()

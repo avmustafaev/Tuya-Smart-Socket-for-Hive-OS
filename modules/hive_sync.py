@@ -73,4 +73,4 @@ class HiveSync:
         return self.hiveos_requests_api("")["data"]
 
     def getrigs_api(self, ferms_id):
-        return self.hiveos_requests_api(f"{ferms_id}/workers?platform=1")["data"]
+        return self.hiveos_requests_api(f"{ferms_id}/workers?platform=1&filter=problem")["data"]
